@@ -1,0 +1,144 @@
+  <!-- ── PIXEL CONDITIONS ── -->
+  <div class="lesson" id="lesson-pixel">
+    <h2>While Loops With Pixel Conditions</h2>
+    <p class="section-desc">In real automation, you rarely want <code>while true. Instead, you loop based on a pixel condition — whether something has appeared or disappeared on screen. This is how most real scripts actually work.</span></p>
+    <span class="tag tag-adv">Advanced</span>
+
+    <h3>Pattern 1 — Wait Until Pixel Appears</h3>
+    <p>Use this when you are waiting for something to show up on screen before acting.</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; We keep looping while the red pixel is NOT found
+; Once it appears, the loop exits and we click
+
+While !PixelSearch(&amp;x, &amp;y, 0, 0, A_ScreenWidth, A_ScreenHeight, 0xFF0000, 5)
+{
+    Sleep(50)   ; Check every 50ms — don't hammer the CPU
+}
+
+Click(x, y)  ; Now click where we found it</code></pre>
+    </div>
+    <div class="card info-card">
+      <div class="card-title">🔍 What this means, step by step</div>
+      <p><code>PixelSearch returns </code><code>true when the pixel is found. So </code><code>!PixelSearch(...) is </code><code>true while the pixel is absent. The loop keeps sleeping and retrying. The moment the pixel appears, </span><code>PixelSearch returns </code><code>true, the </code><code>! flips it to </code><code>false, and the loop exits — then we click.</code></p>
+    </div>
+
+    <h3>Pattern 2 — Keep Acting While Pixel Exists</h3>
+    <p>Use this when you want to keep doing something until a pixel disappears.</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Keep clicking while the green "Start" pixel is still visible
+While PixelSearch(&amp;x, &amp;y, 0, 0, A_ScreenWidth, A_ScreenHeight, 0x00FF00, 5)
+{
+    Click(x, y)
+    Sleep(100)  ; Pause between clicks
+}</code></pre>
+    </div>
+    <div class="card info-card">
+      <div class="card-title">🔍 What this means, step by step</div>
+      <p>When <code>PixelSearch finds the pixel it returns </code><code>true, so the loop body runs. We click, sleep, and check again. The moment the pixel disappears, </span><code>PixelSearch returns </code><code>false and the loop stops immediately.</code></p>
+    </div>
+
+    <h3>The Two Core Patterns</h3>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;background:rgba(0,229,255,0.03)">
+        <code style="font-family:var(--mono);font-size:13px;color:#a78bfa;background:rgba(167,139,250,0.1);padding:4px 10px;border-radius:6px;flex-shrink:0">while !condition</code>
+        <span style="font-size:14px;color:var(--text2)">→ Wait until something <strong style="color:var(--accent3)">appears</strong>
+      </div>
+      <div style="padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;background:rgba(0,229,255,0.02)">
+        <code style="font-family:var(--mono);font-size:13px;color:#a78bfa;background:rgba(167,139,250,0.1);padding:4px 10px;border-radius:6px;flex-shrink:0">while condition</code>
+        <span style="font-size:14px;color:var(--text2)">→ Keep going until something <strong style="color:var(--accent4)">disappears</strong>
+      </div>
+    </div>
+    <p style="margin-top:1rem">Everything in pixel-based automation is built from these two ideas.</p>
+
+    <h3>PixelSearch Parameters</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Parameter</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><code>&amp;x, &amp;y</code></td><td>Output vars that receive the found pixel's coordinates</td></tr>
+          <tr><td><code>x1, y1</code></td><td>Top-left corner of search area (use <code>0, 0</code> for full screen)</td></tr>
+          <tr><td><code>x2, y2</code></td><td>Bottom-right corner (<code>A_ScreenWidth, A_ScreenHeight</code>)</td></tr>
+          <tr><td><code>0xFF0000</code></td><td>Target color in hex RGB format</td></tr>
+          <tr><td><code>5</code></td><td>Color variance tolerance (0 = exact match, higher = more lenient)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Real-World Example: Wait for Button, Then Click</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">#Requires AutoHotkey &gt;= 2.0
+#SingleInstance Force
+
+^F1::
+{
+    ; Step 1: First, we wait for the "Start" button pixel to appear
+    ToolTip("Waiting for button...")
+    While !PixelSearch(&amp;x, &amp;y, 0, 0, A_ScreenWidth, A_ScreenHeight, 0x00B050, 10)
+    {
+        Sleep(100)
+    }
+
+    ; Step 2: Button found — click it
+    ToolTip("Found! Clicking...")
+    Click(x, y)
+    Sleep(500)
+
+    ; Step 3: Wait for it to go away (confirm click worked)
+    While PixelSearch(&amp;x, &amp;y, 0, 0, A_ScreenWidth, A_ScreenHeight, 0x00B050, 10)
+    {
+        Sleep(50)
+    }
+
+    ToolTip("Done!")
+    Sleep(1500)
+    ToolTip()
+}</code></pre>
+    </div>
+
+    <h3>Practice Problems</h3>
+    <div class="grid-2">
+      <div class="card tip-card">
+        <div class="card-title">🟢 A "Start" button appears on screen</div>
+        <p>→ Use <code>while !PixelSearch(...) — loop until it shows up, then click it.</span></p>
+      </div>
+      <div class="card warn-card">
+        <div class="card-title">⏳ A loading spinner is spinning</div>
+        <p>→ Use <code>while PixelSearch(...) — keep waiting while it exists, exit when it's gone.</span></p>
+      </div>
+      <div class="card info-card">
+        <div class="card-title">🔴 A "Stop" signal disappears</div>
+        <p>→ Use <code>while PixelSearch(...) — loop while stop signal exists; when it goes, proceed.</span></p>
+      </div>
+      <div class="card">
+        <div class="card-title">✨ A confirm dialog appears</div>
+        <p>→ Use <code>while !PixelSearch(...) — wait until dialog pixel appears, then interact.</span></p>
+      </div>
+    </div>
+
+    <div class="card warn-card" style="margin-top:1.5rem">
+      <div class="card-title">⚠️ Pixel Search Limitations</div>
+      <p>Pixel-based loops are powerful but fragile. Colors can shift slightly due to anti-aliasing or rendering differences. Screen resolution and DPI settings affect coordinates. UI elements can move between resolutions. For production scripts, combine pixel search with image search, add retry counters, and always include a timeout so you don't loop forever if the pixel never appears.</p>
+    </div>
+
+    <h3>Adding a Timeout (Best Practice)</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Safe pixel wait with timeout
+startTime := A_TickCount
+timeout   := 10000  ; 10 seconds max
+
+While !PixelSearch(&amp;x, &amp;y, 0, 0, A_ScreenWidth, A_ScreenHeight, 0xFF0000, 5)
+{
+    if (A_TickCount - startTime &gt; timeout) {
+        MsgBox("Pixel never appeared! Aborting.")
+        return
+    }
+    Sleep(50)
+}
+
+Click(x, y)  ; Safe to act now</code></pre>
+    </div>
+  </div>

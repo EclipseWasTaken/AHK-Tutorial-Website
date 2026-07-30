@@ -1,0 +1,125 @@
+<!-- ── VARIABLES & TYPES ── -->
+<div class="lesson" id="lesson-variables">
+  <h2>Variables &amp; Types 🧪</h2>
+  <p class="section-desc">Hey! In this lesson, we will look at how AutoHotkey stores and manages data. Unlike strict languages like C++ or Java, AHK variables are dynamic—they can hold text, numbers, or complex objects, and you don't need to declare their types beforehand. However, this flexibility can lead to tricky bugs if you aren't careful!</p>
+
+  <h3>1. Variables &amp; Assignments</h3>
+  <p>In AHK v2, you assign values using the <code>:=</code> operator. The old <code>=</code> assignment from v1 is completely gone (it's now strictly used for comparisons). Strings must always be wrapped in quotes!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Strings (single or double quotes work)
+name := "Potato"
+title := 'AHK Mentor'
+
+; Numbers
+age := 24
+pi := 3.14159
+
+; Hexadecimal numbers
+hexVal := 0xFF ; Evaluates to 255
+
+; Check if a variable has ever been assigned a value
+if !IsSet(myMysteryVar) {
+    MsgBox("myMysteryVar is currently empty/unassigned!")
+}</code></pre>
+  </div>
+
+  <h3>2. Scoping Rules (Global vs. Local)</h3>
+  <p>By default, variables created inside functions are local to that function. If you want to modify a global variable (created outside functions), you must explicitly declare it as <code>global</code> inside your function!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">score := 0 ; Global variable
+
+AddScore() {
+    global score ; Declaring that we want to write to the global score variable
+    score += 10
+}
+
+ShowScore() {
+    ; We can read global variables without the global keyword, but declaring local helps organize
+    local message := "Your current score: " . score
+    MsgBox(message)
+}
+
+^1:: AddScore()
+^2:: ShowScore()</code></pre>
+  </div>
+
+  <h3>3. Type Conversion &amp; Checking (The Beginner Trap!)</h3>
+  <div class="card warning-card">
+    <div class="card-title">⚠️ The Silent Type Bug</div>
+    <p>A major trap for beginners is comparing strings to numbers. In AHK v2, <code>"42" == 42</code> is **false**! If you read a number from a text file, an input box, or the clipboard, it is treated as a <strong>String</strong>, and comparing it to a raw number will fail silently.</p>
+    <p><strong>The Solution:</strong> Use type conversions to ensure clean matching!</p>
+  </div>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Reading from a dialog returns a String!
+input := InputBox("Enter a number:", "Guesser")
+
+if (input.Result != "Cancel") {
+    ; Convert string to integer explicitly so comparisons work!
+    numberVal := Integer(input.Value)
+    
+    if (numberVal == 42) {
+        MsgBox("You guessed the secret number!")
+    } else {
+        MsgBox("Nope, " . numberVal . " is not it.")
+    }
+}</code></pre>
+  </div>
+
+  <h3>4. Built-in Type &amp; Checking Functions</h3>
+  <p>Here are the built-in functions I use to inspect variables and verify inputs before using them in my automation scripts:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Function</th>
+          <th>What it returns / checks</th>
+          <th>Examples</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Type(val)</code></td>
+          <td>Returns the type as a string: <code>"Integer"</code>, <code>"Float"</code>, <code>"String"</code>, <code>"Array"</code>, <code>"Map"</code>, etc.</td>
+          <td><code>Type(3.14)</code> ➜ <code>"Float"</code></td>
+        </tr>
+        <tr>
+          <td><code>IsInteger(val)</code></td>
+          <td>Returns true if the value can be parsed as an integer.</td>
+          <td><code>IsInteger("42")</code> ➜ <code>true</code></td>
+        </tr>
+        <tr>
+          <td><code>IsFloat(val)</code></td>
+          <td>Returns true if the value is a floating-point number.</td>
+          <td><code>IsFloat(3.14)</code> ➜ <code>true</code></td>
+        </tr>
+        <tr>
+          <td><code>IsNumber(val)</code></td>
+          <td>Returns true if the value is either an integer or float.</td>
+          <td><code>IsNumber("15.5")</code> ➜ <code>true</code></td>
+        </tr>
+        <tr>
+          <td><code>Integer(val)</code></td>
+          <td>Converts/coerces the value to an integer.</td>
+          <td><code>Integer("100")</code> ➜ <code>100</code></td>
+        </tr>
+        <tr>
+          <td><code>Float(val)</code></td>
+          <td>Converts/coerces the value to a floating-point decimal.</td>
+          <td><code>Float("2.5")</code> ➜ <code>2.5</code></td>
+        </tr>
+        <tr>
+          <td><code>String(val)</code></td>
+          <td>Converts/coerces a number or boolean to a standard string.</td>
+          <td><code>String(true)</code> ➜ <code>"1"</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

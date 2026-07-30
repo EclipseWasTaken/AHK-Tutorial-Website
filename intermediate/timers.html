@@ -1,0 +1,68 @@
+<!-- ── TIMERS & SETTIMER ── -->
+<div class="lesson" id="lesson-timers">
+  <h2>Timers &amp; SetTimer ⏱️</h2>
+  <p class="section-desc">Hey! In this lesson, we are going to look at one of the absolute best architectural functions in AutoHotkey: <strong>SetTimer</strong>. Timers allow you to run code asynchronously in the background on a schedule. This is crucial for keeping your scripts responsive.</p>
+
+  <h3>Why You Should Stop Using Sleep Loops</h3>
+  <div class="card warning-card">
+    <div class="card-title">🚨 The "Frozen Script" Mistake</div>
+    <p>Many beginners write background checking loops like this:</p>
+    <pre><code>Loop {
+    CheckWindow()
+    Sleep(5000) ; Sleep for 5 seconds
+}</code></pre>
+    <p><strong>The problem:</strong> During that <code>Sleep</code> period, your script is completely frozen. Other hotkeys might lag or fail to trigger, and GUIs will become unresponsive. Sleep blocks the entire thread.</p>
+    <p><strong>The solution:</strong> Use <code>SetTimer()</code>! It schedules a function to run at intervals without blocking any other code in your script.</p>
+  </div>
+
+  <h3>1. Setting Up a Repeating Background Timer</h3>
+  <p>To start a repeating timer, call <code>SetTimer(FunctionName, PeriodMs)</code>. To turn it off, pass a period of <code>0</code>.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Check for an unwanted popup every 2 seconds
+SetTimer(CloseWarningPopup, 2000)
+
+CloseWarningPopup() {
+    if WinExist("Warning - Unsafe File") {
+        WinClose() ; Close the popup
+        SoundBeep(800, 100) ; Sound alert
+        
+        ; Optional: Stop the timer if it only needed to run once
+        ; SetTimer(CloseWarningPopup, 0)
+    }
+}</code></pre>
+  </div>
+
+  <h3>2. One-Shot Timers (Delays Without Freezing)</h3>
+  <p>Sometimes you don't want a repeating timer; you just want to delay an action without freezing the UI. To do this, pass a <strong>negative number</strong> as the period. This tells AHK to run the function exactly *once* after that delay.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Trigger a keypress, but schedule a cleanup task 3 seconds later without freezing
+^s::
+{
+    MsgBox("Triggered! The cleanup will occur in 3 seconds in the background.")
+    ; Run CleanUp exactly once in 3000ms
+    SetTimer(CleanUp, -3000)
+}
+
+CleanUp() {
+    MsgBox("CleanUp executed asynchronously!")
+}</code></pre>
+  </div>
+
+  <h3>3. Working with Closures / Fat Arrows</h3>
+  <p>What if you want to pass arguments to a timer callback? You can use a nested function or a fat-arrow lambda function! This is incredibly sleek in AHK v2:</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">AnnounceMessage(msg, delay) {
+    ; Schedule an anonymous function to show the message
+    SetTimer( () => MsgBox(msg), -delay )
+}
+
+; Call it! Shows "Hello" in 1.5 seconds, but returns immediately
+AnnounceMessage("Hello from 1.5s ago!", 1500)</code></pre>
+  </div>
+</div>

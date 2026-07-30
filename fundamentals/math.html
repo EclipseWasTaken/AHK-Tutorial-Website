@@ -1,0 +1,83 @@
+<!-- ── MATH & NUMBERS ── -->
+<div class="lesson" id="lesson-math">
+  <h2>Math &amp; Numbers 🧮</h2>
+  <p class="section-desc">Hey! In this lesson, I'm going to show you how to handle math and numbers in AHK v2. Whether you are doing simple addition, calculating coordinates, or generating random delays for game automation, this is essential stuff.</p>
+
+  <h3>The Division Trap (Float vs. Integer)</h3>
+  <div class="card info-card">
+    <div class="card-title">💡 Pay Attention Here!</div>
+    <p>A huge trap for beginners in AHK v2 is how division works. Unlike older versions, division in v2 is clean but has two distinct operators:</p>
+    <ul>
+      <li><strong>Standard Division (<code>/</code>):</strong> Always returns a floating-point number (decimal), even if they divide perfectly. E.g. <code>4 / 2</code> is <code>2.0</code>.</li>
+      <li><strong>Integer Division (<code>//</code>):</strong> Discards the decimal part entirely. E.g. <code>5 // 2</code> is <code>2</code>.</li>
+    </ul>
+  </div>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Let's see it in action!
+x := 5
+y := 2
+
+floatDiv := x / y   ; 2.5
+intDiv   := x // y  ; 2
+remainder := Mod(x, y) ; 1 (Modulo operator)
+
+MsgBox("Float: " . floatDiv . "`nInteger: " . intDiv . "`nRemainder: " . remainder)</code></pre>
+  </div>
+
+  <h3>Essential Math Functions</h3>
+  <p>Here are the common math functions I use in my scripts almost every day. Try running them in the Playground!</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Function</th>
+          <th>What it does</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Abs(n)</code></td>
+          <td>Returns absolute value (removes negative sign)</td>
+          <td><code>Abs(-5)</code> ➜ <code>5</code></td>
+        </tr>
+        <tr>
+          <td><code>Round(n, precision)</code></td>
+          <td>Rounds to nearest integer or decimal places</td>
+          <td><code>Round(3.14159, 2)</code> ➜ <code>3.14</code></td>
+        </tr>
+        <tr>
+          <td><code>Floor(n)</code></td>
+          <td>Rounds down to nearest integer</td>
+          <td><code>Floor(3.8)</code> ➜ <code>3</code></td>
+        </tr>
+        <tr>
+          <td><code>Ceil(n)</code></td>
+          <td>Rounds up to nearest integer</td>
+          <td><code>Ceil(3.1)</code> ➜ <code>4</code></td>
+        </tr>
+        <tr>
+          <td><code>Random(min, max)</code></td>
+          <td>Generates a random integer between min and max</td>
+          <td><code>Random(1, 100)</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Dynamic Delays (Game &amp; Web Automation)</h3>
+  <p>If you are writing scripts to automate actions (like clicking or typing), static delays (like <code>Sleep(1000)</code>) make your script look like a bot. I always use <code>Random()</code> to add human-like variation:</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Perform a human-like click with a randomized delay
+Click()
+; Sleep anywhere between 150ms and 450ms
+sleepTime := Random(150, 450)
+Sleep(sleepTime)
+Send("Hello!")</code></pre>
+  </div>
+</div>

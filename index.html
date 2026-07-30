@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AHK v2 — Learn AutoHotkey</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">AHK<span>.v2</span></div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="showSection('learn',this)">Learn</button>
+      <button class="nav-link" onclick="showSection('reference',this)">Reference</button>
+      <button class="nav-link" onclick="showSection('playground',this)">Playground</button>
+      <button class="nav-link" onclick="showSection('quiz',this)">Quiz</button>
+      <button class="nav-link" onclick="showSection('snippets',this)">Snippets</button>
+      <button class="nav-link" onclick="showSection('progress',this)">My Progress</button>
+    </div>
+    <div class="creator-badge">Made By <span>Eclipse0106</span></div>
+  </nav>
+
+  <div class="shell">
+    <div class="sidebar">
+      <!-- LEARN sidebar -->
+      <div class="sidebar-section" id="learn-nav">
+        <div class="sidebar-label">Fundamentals</div>
+        <button class="sidebar-item active" onclick="showLesson('intro',this)"><span
+            class="sidebar-dot"></span>Introduction</button>
+        <button class="sidebar-item" onclick="showLesson('syntax',this)"><span class="sidebar-dot"></span>Basic
+          Syntax</button>
+        <button class="sidebar-item" onclick="showLesson('hotkeys',this)"><span
+            class="sidebar-dot"></span>Hotkeys</button>
+        <button class="sidebar-item" onclick="showLesson('variables',this)"><span
+            class="sidebar-dot"></span>Variables &amp; Types</button>
+        <button class="sidebar-item" onclick="showLesson('math',this)"><span
+            class="sidebar-dot"></span>Math &amp; Numbers</button>
+        <button class="sidebar-item" onclick="showLesson('controlflow',this)"><span class="sidebar-dot"></span>Control
+          Flow</button>
+        <button class="sidebar-item" onclick="showLesson('sending',this)"><span class="sidebar-dot"></span>Sending Keys
+          &amp; Clicks</button>
+        <button class="sidebar-item" onclick="showLesson('dialogs',this)"><span
+            class="sidebar-dot"></span>MsgBox &amp; Dialogs</button>
+        <button class="sidebar-item" onclick="showLesson('arrays',this)"><span
+            class="sidebar-dot"></span>Arrays Deep Dive</button>
+        <div class="sidebar-label" style="margin-top:1rem">Intermediate</div>
+        <button class="sidebar-item" onclick="showLesson('functions',this)"><span
+            class="sidebar-dot warn"></span>Functions</button>
+        <button class="sidebar-item" onclick="showLesson('objects',this)"><span class="sidebar-dot warn"></span>Objects
+          &amp; Maps</button>
+        <button class="sidebar-item" onclick="showLesson('strings',this)"><span class="sidebar-dot warn"></span>String
+          Methods</button>
+        <button class="sidebar-item" onclick="showLesson('clipboard',this)"><span
+            class="sidebar-dot warn"></span>Clipboard Automation</button>
+        <button class="sidebar-item" onclick="showLesson('timers',this)"><span
+            class="sidebar-dot warn"></span>Timers &amp; SetTimer</button>
+        <button class="sidebar-item" onclick="showLesson('run',this)"><span
+            class="sidebar-dot warn"></span>Run &amp; Processes</button>
+        <button class="sidebar-item" onclick="showLesson('inifiles',this)"><span
+            class="sidebar-dot warn"></span>Ini Files &amp; Settings</button>
+        <button class="sidebar-item" onclick="showLesson('sound',this)"><span
+            class="sidebar-dot warn"></span>Sound &amp; Alerts</button>
+        <button class="sidebar-item" onclick="showLesson('keystate',this)"><span
+            class="sidebar-dot warn"></span>Mouse &amp; Key State</button>
+        <button class="sidebar-item" onclick="showLesson('tray',this)"><span
+            class="sidebar-dot warn"></span>Tray Icon &amp; Menu</button>
+        <button class="sidebar-item" onclick="showLesson('filegui',this)"><span class="sidebar-dot warn"></span>GUI
+          Basics</button>
+        <button class="sidebar-item" onclick="showLesson('window',this)"><span class="sidebar-dot warn"></span>Window
+          Management</button>
+        <button class="sidebar-item" onclick="showLesson('filesystem',this)"><span class="sidebar-dot warn"></span>File
+          System</button>
+        <div class="sidebar-label" style="margin-top:1rem">Advanced</div>
+        <button class="sidebar-item" onclick="showLesson('pixel',this)"><span class="sidebar-dot purple"></span>Pixel
+          Conditions</button>
+        <button class="sidebar-item" onclick="showLesson('advmethods',this)"><span
+            class="sidebar-dot purple"></span>Array &amp; Map Methods</button>
+        <button class="sidebar-item" onclick="showLesson('classes',this)"><span
+            class="sidebar-dot purple"></span>Classes &amp; OOP</button>
+        <button class="sidebar-item" onclick="showLesson('regex',this)"><span
+            class="sidebar-dot purple"></span>RegEx</button>
+        <button class="sidebar-item" onclick="showLesson('comobj',this)"><span class="sidebar-dot purple"></span>COM
+          Objects</button>
+        <button class="sidebar-item" onclick="showLesson('include',this)"><span
+            class="sidebar-dot purple"></span>#Include &amp; Multi-file</button>
+        <button class="sidebar-item" onclick="showLesson('onmessage',this)"><span
+            class="sidebar-dot purple"></span>OnMessage &amp; Windows</button>
+        <button class="sidebar-item" onclick="showLesson('errorhandling',this)"><span
+            class="sidebar-dot purple"></span>Error Handling</button>
+        <button class="sidebar-item" onclick="showLesson('debugging',this)"><span
+            class="sidebar-dot purple"></span>Debugging Tips</button>
+      </div>
+      <!-- REFERENCE sidebar -->
+      <div class="sidebar-section" id="ref-nav" style="display:none">
+        <div class="sidebar-label">Quick Reference</div>
+        <button class="sidebar-item active" onclick="showRef('hotkey-syms',this)"><span
+            class="sidebar-dot"></span>Hotkey Symbols</button>
+        <button class="sidebar-item" onclick="showRef('built-in-vars',this)"><span class="sidebar-dot"></span>Built-in
+          Vars</button>
+        <button class="sidebar-item" onclick="showRef('directives',this)"><span
+            class="sidebar-dot warn"></span>Directives</button>
+        <button class="sidebar-item" onclick="showRef('functions-ref',this)"><span
+            class="sidebar-dot warn"></span>Common Functions</button>
+      </div>
+      <!-- SNIPPETS sidebar -->
+      <div class="sidebar-section" id="snip-nav" style="display:none">
+        <div class="sidebar-label">Categories</div>
+        <button class="sidebar-item active" onclick="showSnippets('productivity',this)"><span
+            class="sidebar-dot"></span>Productivity</button>
+        <button class="sidebar-item" onclick="showSnippets('text',this)"><span class="sidebar-dot warn"></span>Text
+          Expansion</button>
+        <button class="sidebar-item" onclick="showSnippets('mouse',this)"><span class="sidebar-dot purple"></span>Mouse
+          &amp; Clicks</button>
+        <button class="sidebar-item" onclick="showSnippets('windows',this)"><span
+            class="sidebar-dot"></span>Windows</button>
+      </div>
+    </div><!-- /sidebar -->
+
+    <div class="main" id="main-content">
+      <!-- Learn section is default, so we embed its wrapper directly to avoid an extra fetch -->
+      <div class="section active" id="section-learn">
+        <div id="lesson-container"></div>
+      </div>
+    </div><!-- .main -->
+  </div><!-- .shell -->
+
+  <script src="script.js"></script>
+</body>
+
+</html>

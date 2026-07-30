@@ -1,0 +1,314 @@
+  <!-- ── REGEX ── -->
+  <div class="lesson" id="lesson-regex">
+    <h2>Regular Expressions</h2>
+    <p class="section-desc">Regular Expressions (RegEx) are a powerful mini-language for pattern matching. Instead of looking for an exact word, you can look for patterns like "a phone number" or "an email address".</p>
+    <span class="tag tag-adv">Advanced</span>
+
+    <h3>RegExMatch() — Finding a Pattern</h3>
+    <p><code>RegExMatch() searches a string for a pattern. It returns the position (index) where the match starts, or </span><code>0 if the pattern wasn't found.</code></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Let's find the position of a word starting with 'Wo'
+pos := RegExMatch("Hello World", "Wo\w+")
+
+if (pos > 0) {
+    MsgBox("Found match at position " . pos)
+} else {
+    MsgBox("No match found.")
+}</code></pre>
+    </div>
+
+    <h3>Extracting Data: The Match Object</h3>
+    <p>Finding the position is nice, but usually, we want to extract the actual text that matched. To do this, we pass a variable with the <code>&amp; (ByRef) symbol. AHK will fill this variable with a </code><strong>Match Object</strong>.</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; I use &amp;m to get the Match Object back
+RegExMatch("My order number is 94821", "\d+", &amp;m)
+
+; m[0] always contains the full matched text
+MsgBox("Extracted number: " . m[0])  ; "94821"</code></pre>
+    </div>
+
+    <h3>Capture Groups: Splitting up matches</h3>
+    <p>If you wrap parts of your pattern in parentheses <code>( ), RegEx treats them as </code><strong>Capture Groups</strong>. The Match Object stores each group separately so you can easily pull out specific pieces of data.</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Parsing a date format: YYYY-MM-DD
+RegExMatch("2024-01-15", "(\d{4})-(\d{2})-(\d{2})", &amp;m)
+
+MsgBox(
+    "Full match: " . m[0] . "`n" .
+    "Year: "       . m[1] . "`n" .
+    "Month: "      . m[2] . "`n" .
+    "Day: "        . m[3]
+)</code></pre>
+    </div>
+
+    <h3>Named Capture Groups (Best Practice)</h3>
+    <p>Using numbers like <code>m[2] can get confusing in large patterns. You can name your groups using the syntax </span><code>(?P&lt;name&gt;...).</code></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Named groups are my favorite way to parse data
+RegExMatch("john@example.com", "(?P&lt;user&gt;\w+)@(?P&lt;domain&gt;\S+)", &amp;m)
+
+MsgBox("User is: " . m["user"])      ; "john"
+MsgBox("Domain is: " . m["domain"])  ; "example.com"</code></pre>
+    </div>
+
+    <h3>RegExReplace() — Search and Replace</h3>
+    <p>Instead of just finding text, <code>RegExReplace() replaces all matches with a new string. It returns the modified string.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Let's censor all vowels in a sentence
+result := RegExReplace("Hello World, how are you?", "[aeiou]", "*")
+
+MsgBox(result)  ; "H*ll* W*rld, h*w *r* y**?"
+
+; Strip out everything except numbers
+onlyNums := RegExReplace("Phone: (555) 123-4567", "\D", "")
+MsgBox(onlyNums) ; "5551234567"</code></pre>
+    </div>
+
+    <h3>AHK RegEx Flags</h3>
+    <p>AHK uses PCRE (Perl Compatible Regular Expressions). To use flags like case-insensitivity, you prepend them to the pattern string followed by a closing parenthesis <code>).</code></p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Flag</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>i)</code></td><td>Case-insensitive matching</td><td><code>"i)hello"</code> matches "HELLO"</td></tr>
+          <tr><td><code>m)</code></td><td>Multiline (makes <code>^</code> and <code>$</code> match start/end of lines)</td><td><code>"m)^start"</code></td></tr>
+          <tr><td><code>s)</code></td><td>Dot matches newline (usually <code>.</code> ignores newlines)</td><td><code>"s).*?"</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+        <h3>Comprehensive Cheat Sheet</h3>
+    <p>A complete reference for RegEx patterns and syntax.</p>
+    <div class="accordion">
+      <details>
+        <summary>Common / Most Used</summary>
+        <div class="accordion-content">
+          <div class="tbl-wrap">
+          <table style="font-family: var(--mono); font-size: 0.9rem;">
+            <thead><tr><th>Pattern</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span style="color:var(--accent4)">[abc]</span></td><td>A single character of: a, b or c</td><td>[abc] matches a, b, or c</td></tr>
+              <tr><td><span style="color:var(--accent4)">[^abc]</span></td><td>A character except: a, b or c</td><td>[^abc] matches d, e, f...</td></tr>
+              <tr><td><span style="color:var(--accent4)">[a-z]</span></td><td>A character in the range: a-z</td><td>[a-z] matches lowercase letters</td></tr>
+              <tr><td><span style="color:var(--accent4)">[^a-z]</span></td><td>A character not in the range: a-z</td><td>[^a-z] matches uppercase, digits, symbols</td></tr>
+              <tr><td><span style="color:var(--accent4)">[a-zA-Z]</span></td><td>A character in the range: a-z or A-Z</td><td>[a-zA-Z] matches any letter</td></tr>
+              <tr><td><span style="color:var(--accent4)">.</span></td><td>Any single character</td><td>a.c matches abc, a1c, a@c</td></tr>
+              <tr><td><span style="color:var(--accent4)">a|b</span></td><td>Alternate - match either a or b</td><td>cat|dog matches cat or dog</td></tr>
+              <tr><td><span style="color:var(--accent4)">\s</span></td><td>Any whitespace character</td><td>\s+ matches spaces, tabs, newlines</td></tr>
+              <tr><td><span style="color:var(--accent4)">\S</span></td><td>Any non-whitespace character</td><td>\S+ matches visible characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">\d</span></td><td>Any digit</td><td>\d+ matches 123</td></tr>
+              <tr><td><span style="color:var(--accent4)">\D</span></td><td>Any non-digit</td><td>\D+ matches abc</td></tr>
+              <tr><td><span style="color:var(--accent4)">\w</span></td><td>Any word character</td><td>\w+ matches hello123</td></tr>
+              <tr><td><span style="color:var(--accent4)">\W</span></td><td>Any non-word character</td><td>\W+ matches @#$</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?:...)</span></td><td>Non-capturing group</td><td>(?:abc)+ matches abc sequences</td></tr>
+              <tr><td><span style="color:var(--accent4)">(...)</span></td><td>Capturing group</td><td>(\d+) captures numbers</td></tr>
+              <tr><td><span style="color:var(--accent4)">a?</span></td><td>Zero or one of a</td><td>ab?c matches ac, abc</td></tr>
+              <tr><td><span style="color:var(--accent4)">a*</span></td><td>Zero or more of a</td><td>ab*c matches ac, abc, abbc</td></tr>
+              <tr><td><span style="color:var(--accent4)">a+</span></td><td>One or more of a</td><td>ab+c matches abc, abbc</td></tr>
+              <tr><td><span style="color:var(--accent4)">a{3}</span></td><td>Exactly 3 of a</td><td>\d{3} matches 123</td></tr>
+              <tr><td><span style="color:var(--accent4)">a{3,}</span></td><td>3 or more of a</td><td>\d{3,} matches 123, 1234...</td></tr>
+              <tr><td><span style="color:var(--accent4)">a{3,6}</span></td><td>Between 3 and 6 of a</td><td>\d{3,6} matches 123, 1234, 12345, 123456</td></tr>
+              <tr><td><span style="color:var(--accent4)">^</span></td><td>Start of string</td><td>^hello matches hello at start</td></tr>
+              <tr><td><span style="color:var(--accent4)">$</span></td><td>End of string</td><td>world$ matches world at end</td></tr>
+              <tr><td><span style="color:var(--accent4)">\b</span></td><td>A word boundary</td><td>\bcat\b matches cat as whole word</td></tr>
+              <tr><td><span style="color:var(--accent4)">\B</span></td><td>Non-word boundary</td><td>\Bcat\B matches cat within word</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Character classes</summary>
+        <div class="accordion-content">
+          <div class="tbl-wrap">
+          <table style="font-family: var(--mono); font-size: 0.9rem;">
+            <thead><tr><th>Pattern</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span style="color:var(--accent4)">\w \d \s</span></td><td>word, digit, whitespace</td><td>\w+ \d+ \s+ matches word123 space</td></tr>
+              <tr><td><span style="color:var(--accent4)">\W \D \S</span></td><td>not word, digit, whitespace</td><td>\W+ matches @#$</td></tr>
+              <tr><td><span style="color:var(--accent4)">[a-g]</span></td><td>character between a & g</td><td>[a-g] matches a, b, c, d, e, f, g</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:alnum:]]</span></td><td>Letters and digits</td><td>[[:alnum:]] matches alphanumeric characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:alpha:]]</span></td><td>Letters</td><td>[[:alpha:]] matches alphabetic characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:ascii:]]</span></td><td>ASCII codes 0-127</td><td>[[:ascii:]] matches ASCII characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:blank:]]</span></td><td>Space or tab only</td><td>[[:blank:]] matches space and tab</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:cntrl:]]</span></td><td>Control characters</td><td>[[:cntrl:]] matches control characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:digit:]]</span></td><td>Decimal digits</td><td>[[:digit:]] matches 0-9</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:graph:]]</span></td><td>Visible characters (not space)</td><td>[[:graph:]] matches printable non-space</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:lower:]]</span></td><td>Lowercase letters</td><td>[[:lower:]] matches a-z</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:print:]]</span></td><td>Visible characters</td><td>[[:print:]] matches printable characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:punct:]]</span></td><td>Visible punctuation characters</td><td>[[:punct:]] matches punctuation</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:space:]]</span></td><td>Whitespace</td><td>[[:space:]] matches whitespace characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:upper:]]</span></td><td>Uppercase letters</td><td>[[:upper:]] matches A-Z</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:word:]]</span></td><td>Word characters</td><td>[[:word:]] matches word characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:xdigit:]]</span></td><td>Hexadecimal digits</td><td>[[:xdigit:]] matches 0-9A-Fa-f</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:&lt;:]]</span></td><td>Start of word</td><td>[[:&lt;:]] matches word start boundary</td></tr>
+              <tr><td><span style="color:var(--accent4)">[[:&gt;:]]</span></td><td>End of word</td><td>[[:&gt;:]] matches word end boundary</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Anchors</summary>
+        <div class="accordion-content">
+          <div class="tbl-wrap">
+          <table style="font-family: var(--mono); font-size: 0.9rem;">
+            <thead><tr><th>Pattern</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span style="color:var(--accent4)">\G</span></td><td>Start of match</td><td>\G\d+ matches digits from last match position</td></tr>
+              <tr><td><span style="color:var(--accent4)">^</span></td><td>Start of string</td><td>^hello matches hello at start of string</td></tr>
+              <tr><td><span style="color:var(--accent4)">$</span></td><td>End of string</td><td>world$ matches world at end of string</td></tr>
+              <tr><td><span style="color:var(--accent4)">\A</span></td><td>Start of string</td><td>\Ahello matches hello at very start</td></tr>
+              <tr><td><span style="color:var(--accent4)">\Z</span></td><td>End of string</td><td>world\Z matches world at very end</td></tr>
+              <tr><td><span style="color:var(--accent4)">\z</span></td><td>Absolute end of string</td><td>end\z matches end at absolute end</td></tr>
+              <tr><td><span style="color:var(--accent4)">\b</span></td><td>A word boundary</td><td>\bword\b matches whole word</td></tr>
+              <tr><td><span style="color:var(--accent4)">\B</span></td><td>Non-word boundary</td><td>\Bcat\B matches cat within word</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Escaped characters</summary>
+        <div class="accordion-content">
+          <div class="tbl-wrap">
+          <table style="font-family: var(--mono); font-size: 0.9rem;">
+            <thead><tr><th>Pattern</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span style="color:var(--accent4)">\. \* \\</span></td><td>escaped special characters</td><td>\. matches literal dot</td></tr>
+              <tr><td><span style="color:var(--accent4)">\+</span></td><td>reserved characters</td><td>\+ matches literal plus sign</td></tr>
+              <tr><td><span style="color:var(--accent4)">\000</span></td><td>octal escape</td><td>\000 matches null character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\xFF</span></td><td>hexadecimal escape</td><td>\xFF matches character with hex value FF</td></tr>
+              <tr><td><span style="color:var(--accent4)">\uFFFF</span></td><td>unicode escape</td><td>\u0041 matches character A</td></tr>
+              <tr><td><span style="color:var(--accent4)">\u{FFFF}</span></td><td>extended unicode escape</td><td>\u{1F600} matches emoji</td></tr>
+              <tr><td><span style="color:var(--accent4)">\cI</span></td><td>control character escape</td><td>\cI matches tab character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\t</span></td><td>tab</td><td>\t matches tab character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\n</span></td><td>line feed</td><td>\n matches newline character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\v</span></td><td>vertical tab</td><td>\v matches vertical tab</td></tr>
+              <tr><td><span style="color:var(--accent4)">\f</span></td><td>form feed</td><td>\f matches form feed character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\r</span></td><td>carriage return</td><td>\r matches carriage return</td></tr>
+              <tr><td><span style="color:var(--accent4)">\0</span></td><td>null</td><td>\0 matches null character</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Groups & Lookaround</summary>
+        <div class="accordion-content">
+          <div class="tbl-wrap">
+          <table style="font-family: var(--mono); font-size: 0.9rem;">
+            <thead><tr><th>Pattern</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span style="color:var(--accent4)">(?:...)</span></td><td>Non-capturing group</td><td>(?:abc)+ matches abc sequences</td></tr>
+              <tr><td><span style="color:var(--accent4)">(...)</span></td><td>Capturing group</td><td>(\d+) captures numbers</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?&gt;...)</span></td><td>Atomic group (non-capturing)</td><td>(?&gt;\d+) matches without backtracking</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?|...)</span></td><td>Duplicate/reset subpattern group number</td><td>(?|(a)|(b)) resets group numbering</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?#...)</span></td><td>Comment group</td><td>(?#this is a comment)abc</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?'name'...)</span></td><td>Named Capturing Group</td><td>(?'word'\w+) captures named group</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?&lt;name&gt;...)</span></td><td>Named Capturing Group</td><td>(?&lt;word&gt;\w+) captures named group</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?P&lt;name&gt;...)</span></td><td>Named Capturing Group</td><td>(?P&lt;word&gt;\w+) Python-style named group</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?imsxUJnxx)</span></td><td>Inline modifiers</td><td>(?i)abc matches case-insensitive</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?imsxUJnxx:...)</span></td><td>Localized inline modifiers</td><td>(?i:abc) applies case-insensitive to abc only</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?(1)yes|no)</span></td><td>Conditional statement</td><td>(a)?(?(1)b|c) matches ab or c</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?(R)yes|no)</span></td><td>Conditional statement</td><td>(?(R)recursive|normal) checks recursion</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?(R#)yes|no)</span></td><td>Recursive Conditional statement</td><td>(?(R#)recursive|normal) checks specific recursion</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?(R&name)yes|no)</span></td><td>Conditional statement</td><td>(?(R&name)yes|no) checks named recursion</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?(?=...)yes|no)</span></td><td>Lookahead conditional</td><td>(?(?=\d)\d+|\w+) matches digits or words</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?(?&lt;=...)yes|no)</span></td><td>Lookbehind conditional</td><td>(?(?&lt;=@)\w+|\d+) matches based on lookbehind</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?(DEFINE)...)</span></td><td>Pre-define patterns before using them</td><td>(?(DEFINE)(?&lt;word&gt;\w+))(?&word)</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?R)</span></td><td>Recurse entire pattern</td><td>\(((?&gt;[^()]++|(?R))*)\) matches nested parentheses</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?1)</span></td><td>Match expression defined in capture group 1</td><td>(\w+)\s+(?1) matches repeated words</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?+1)</span></td><td>Match expression defined in the first relative capture group</td><td>(?+1) references relative group</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?&name)</span></td><td>Match expression defined in capture group `name`</td><td>(?&lt;word&gt;\w+)\s+(?&word) matches repeated named groups</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?P=name)</span></td><td>Match subpattern `name`</td><td>(?P&lt;word&gt;\w+)\s+(?P=word) Python-style backreference</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?P&gt;name)</span></td><td>Match expression defined in the capture group "{name}"</td><td>(?P&lt;word&gt;\w+)\s+(?P&gt;word) Python-style subroutine</td></tr>
+              <tr><td><span style="color:var(--accent4)">\1</span></td><td>backreference to group #1</td><td>(\w)\1 matches doubled letters</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?=...)</span></td><td>Positive Lookahead</td><td>\d+(?=px) matches numbers before px</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?!...)</span></td><td>Negative Lookahead</td><td>\d+(?!px) matches numbers not before px</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?&lt;=...)</span></td><td>Positive Lookbehind</td><td>(?&lt;=\$)\d+ matches numbers after $</td></tr>
+              <tr><td><span style="color:var(--accent4)">(?&lt;!...)</span></td><td>Negative Lookbehind</td><td>(?&lt;!un)happy matches happy not preceded by un</td></tr>
+              <tr><td><span style="color:var(--accent4)">(*ACCEPT)</span></td><td>Control verb</td><td>(*ACCEPT) forces match to succeed</td></tr>
+              <tr><td><span style="color:var(--accent4)">(*FAIL)</span></td><td>Control verb</td><td>(*FAIL) forces match to fail</td></tr>
+              <tr><td><span style="color:var(--accent4)">(*MARK:NAME)</span></td><td>Control verb</td><td>(*MARK:label) marks position for backtracking</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Quantifiers & Alternation</summary>
+        <div class="accordion-content">
+          <div class="tbl-wrap">
+          <table style="font-family: var(--mono); font-size: 0.9rem;">
+            <thead><tr><th>Pattern</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span style="color:var(--accent4)">a?</span></td><td>Zero or one of a</td><td>ab?c matches ac, abc</td></tr>
+              <tr><td><span style="color:var(--accent4)">a*</span></td><td>Zero or more of a (greedy)</td><td>ab*c matches ac, abc, abbc</td></tr>
+              <tr><td><span style="color:var(--accent4)">a+</span></td><td>One or more of a</td><td>ab+c matches abc, abbc</td></tr>
+              <tr><td><span style="color:var(--accent4)">a{3}</span></td><td>Exactly 3 of a</td><td>\d{3} matches 123</td></tr>
+              <tr><td><span style="color:var(--accent4)">a{3,}</span></td><td>3 or more of a</td><td>\d{3,} matches 123, 1234...</td></tr>
+              <tr><td><span style="color:var(--accent4)">a{3,6}</span></td><td>Between 3 and 6 of a</td><td>\d{3,6} matches 123, 1234, 12345, 123456</td></tr>
+              <tr><td><span style="color:var(--accent4)">a*?</span></td><td>Lazy quantifier</td><td>a*? matches as few a's as possible</td></tr>
+              <tr><td><span style="color:var(--accent4)">a*+</span></td><td>Possessive quantifier</td><td>a*+ matches without backtracking</td></tr>
+              <tr><td><span style="color:var(--accent4)">ab|cd</span></td><td>match ab or cd</td><td>cat|dog matches cat or dog</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Flags / Modifiers</summary>
+        <div class="accordion-content">
+          <div class="tbl-wrap">
+          <table style="font-family: var(--mono); font-size: 0.9rem;">
+            <thead><tr><th>Pattern</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span style="color:var(--accent4)">g</span></td><td>Global</td><td>/abc/g matches all occurrences</td></tr>
+              <tr><td><span style="color:var(--accent4)">m</span></td><td>Multiline</td><td>/^abc/m matches abc at line start</td></tr>
+              <tr><td><span style="color:var(--accent4)">i</span></td><td>Case insensitive</td><td>/abc/i matches ABC, abc, Abc</td></tr>
+              <tr><td><span style="color:var(--accent4)">x</span></td><td>Ignore whitespace / verbose</td><td>Allows comments and whitespace</td></tr>
+              <tr><td><span style="color:var(--accent4)">s</span></td><td>Single line</td><td>. matches newline characters</td></tr>
+              <tr><td><span style="color:var(--accent4)">u</span></td><td>Unicode</td><td>Enables Unicode matching</td></tr>
+              <tr><td><span style="color:var(--accent4)">X</span></td><td>eXtra</td><td>Extra features (Perl)</td></tr>
+              <tr><td><span style="color:var(--accent4)">U</span></td><td>Ungreedy</td><td>Makes quantifiers non-greedy by default</td></tr>
+              <tr><td><span style="color:var(--accent4)">y</span></td><td>Sticky</td><td>Matches from lastIndex position</td></tr>
+              <tr><td><span style="color:var(--accent4)">d</span></td><td>hasIndices</td><td>Generate indices for substring matches</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Substitution</summary>
+        <div class="accordion-content">
+          <div class="tbl-wrap">
+          <table style="font-family: var(--mono); font-size: 0.9rem;">
+            <thead><tr><th>Pattern</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span style="color:var(--accent4)">$0</span></td><td>Complete match contents</td><td>Replace with entire matched text</td></tr>
+              <tr><td><span style="color:var(--accent4)">$1</span></td><td>Contents in capture group 1</td><td>Replace with first captured group</td></tr>
+              <tr><td><span style="color:var(--accent4)">$$</span></td><td>Insert a dollar sign</td><td>Replace with literal $ character</td></tr>
+              <tr><td><span style="color:var(--accent4)">${foo}</span></td><td>Contents in capture group `foo`</td><td>Replace with named group 'foo'</td></tr>
+              <tr><td><span style="color:var(--accent4)">\x20</span></td><td>Hexadecimal replacement values</td><td>Replace with space character (hex 20)</td></tr>
+              <tr><td><span style="color:var(--accent4)">\x{06fa}</span></td><td>Hexadecimal replacement values</td><td>Replace with Unicode character U+06FA</td></tr>
+              <tr><td><span style="color:var(--accent4)">\t</span></td><td>Insert a tab</td><td>Replace with tab character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\r</span></td><td>Insert a carriage return</td><td>Replace with carriage return character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\n</span></td><td>Insert a newline</td><td>Replace with newline character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\f</span></td><td>Insert a form-feed</td><td>Replace with form-feed character</td></tr>
+              <tr><td><span style="color:var(--accent4)">\U</span></td><td>Uppercase Transformation</td><td>Convert following text to uppercase</td></tr>
+              <tr><td><span style="color:var(--accent4)">\L</span></td><td>Lowercase Transformation</td><td>Convert following text to lowercase</td></tr>
+              <tr><td><span style="color:var(--accent4)">\E</span></td><td>Terminate any Transformation</td><td>End case transformation</td></tr>
+              <tr><td><span style="color:var(--accent4)">${1:+foo:bar}</span></td><td>Conditional replacement</td><td>Replace with 'foo' if group 1 exists, else 'bar'</td></tr>
+              <tr><td><span style="color:var(--accent4)">\[</span></td><td>Insert the escaped literal</td><td>Replace with literal [ character</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </details>
+  </div>

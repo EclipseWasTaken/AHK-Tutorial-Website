@@ -1,0 +1,32 @@
+  <div class="lesson" id="lesson-strings">
+    <h2>String Methods</h2>
+    <p class="section-desc">All the built-in string functions you'll use daily.</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">text := "  Hello, World!  "
+
+StrLen(text)           ; 18
+StrUpper(text)         ; "  HELLO, WORLD!  "
+StrLower(text)         ; "  hello, world!  "
+Trim(text)             ; "Hello, World!"
+
+; Search and extract
+InStr(text, "World")    ; Position (9), or 0 if not found
+SubStr(text, 3, 5)      ; "Hello" (start pos, length)
+SubStr(text, -7)        ; "World!  " (from end)
+
+; Replace
+StrReplace(text, "World", "AHK")
+
+; Split
+parts := StrSplit("a,b,c", ",")   ; ["a","b","c"]
+
+; Format strings
+msg := Format("Name: {:10} Age: {:3d}", "Alice", 30)
+
+; Conversions
+num := Integer("42")
+flt := Float("3.14")
+str := String(42)</code></pre>
+    </div>
+  </div>

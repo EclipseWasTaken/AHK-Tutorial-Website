@@ -1,0 +1,55 @@
+<!-- ── #INCLUDE & MULTI-FILE ── -->
+<div class="lesson" id="lesson-include">
+  <h2>#Include &amp; Multi-file Scripts 📁</h2>
+  <p class="section-desc">Hey there! When you write small scripts, putting all your hotkeys and functions in a single file is fine. But when you start building massive automations—like complex macros with separate coordinates, OCR controllers, Discord webhooks, and GUI classes—a single file becomes a nightmare to maintain. In this lesson, I'll show you how to split your code into clean, modular files using <code>#Include</code>.</p>
+
+  <h3>What does #Include do?</h3>
+  <p>The <code>#Include</code> directive tells the AutoHotkey interpreter to take the entire contents of another file and "copy-paste" it directly into the current script at that exact line *before* running. This means you can keep your main file tiny and clean!</p>
+
+  <h3>1. Setting Up a Modular Folder Structure</h3>
+  <p>Here is how I structure a real professional-grade automation project:</p>
+  <pre><code>MyMacroProject/
+│
+├── Main.ahk             ➜ The actual executable script you double-click
+├── Config.ahk           ➜ Holds screen coordinates and settings variables
+├── GUI.ahk              ➜ Defines your beautiful GUI layouts and callbacks
+└── Core/
+    ├── Input.ahk        ➜ Mouse clicks and keyboard click sequences
+    └── ImageScanner.ahk ➜ PixelSearch and image detection functions</code></pre>
+
+  <h3>2. Referencing Multi-file Code (Main.ahk)</h3>
+  <p>Inside your `Main.ahk` file, you simply load the other modules at the top. Here is how simple it is to write modular AHK:</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">#Requires AutoHotkey >=2.0
+#SingleInstance Force
+
+; Load Modules
+#Include "Config.ahk"
+#Include "Core\Input.ahk"
+#Include "GUI.ahk"
+
+; Let's run our main logic!
+StartGui() ; Function defined inside GUI.ahk
+PerformClick(slot1X, slot1Y) ; Slot coords defined in Config.ahk, click func in Input.ahk</code></pre>
+  </div>
+
+  <h3>3. The Standard Library Directory (&lt;Lib&gt;)</h3>
+  <p>If you have utility files that you use across *all* of your projects (like a standard OCR library or a webhook sender), you don't need to copy them into every project folder. You can save them in the central <strong>Lib</strong> folder in your script directory or My Documents AHK folder.</p>
+  <p>When you reference a library using angle brackets, AHK will automatically search those standard folders for it!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; AHK will search in A_ScriptDir\Lib\ or Documents\AutoHotkey\Lib\ for Feiyue's FindText.ahk
+#Include &lt;FindText&gt;
+
+; You can now immediately call FindText functions!
+FindText().Click(100, 100)</code></pre>
+  </div>
+
+  <div class="card info-card">
+    <div class="card-title">💡 My Include Best Practice</div>
+    <p>Always put <code>#Requires AutoHotkey &gt;=2.0</code> and <code>#SingleInstance Force</code> at the top of your **Main** script, but NOT inside your included files. Putting them inside your library modules makes them less reusable. Keep your modules completely self-contained, defining only functions and classes, and avoid adding direct hotkeys or global execution lines inside them.</p>
+  </div>
+</div>

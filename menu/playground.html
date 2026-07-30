@@ -1,0 +1,92 @@
+<div class="section" id="section-playground">
+  <h2>Script Playground</h2>
+  <p class="section-desc">Write AHK v2 logic and simulate the output in your browser. Uses a full JS-based interpreter —
+    great for learning syntax and logic flow. Windows-specific functions (Send, Run, PixelSearch, WinActivate) require
+    real AHK installed.</p>
+
+  <div class="card info-card" style="margin-bottom:1.25rem">
+    <div class="card-title">ℹ️ What this simulator supports</div>
+    <p>Variable assignments, math, string operations, loops (Loop N, While, For-in), if/else if/else, arrays,
+      MsgBox/ToolTip output, and all common built-in functions. Tab key inserts 4 spaces in the editor.</p>
+  </div>
+
+  <div class="playground">
+    <div class="pg-header">
+      <div class="pg-title">AHK v2 Simulator</div>
+      <div class="pg-btns">
+        <select id="pg-template" onchange="loadTemplate(this.value)">
+          <option value="">Load template…</option>
+          <option value="hello">Hello World</option>
+          <option value="vars">Variables &amp; Math</option>
+          <option value="string">String Operations</option>
+          <option value="loop">Loops</option>
+          <option value="ternary">Conditionals</option>
+          <option value="array">Arrays</option>
+          <option value="pixel">Pixel Loop (simulated)</option>
+        </select>
+        <button class="pg-btn run" onclick="runSim()">&#9654; Run</button>
+        <button class="pg-btn" onclick="clearPg()">Clear</button>
+      </div>
+    </div>
+    <textarea class="pg-code" id="pg-code" spellcheck="false"
+      placeholder="; Write AHK v2 code here&#10;name := &quot;World&quot;&#10;MsgBox(&quot;Hello, &quot; . name . &quot;!&quot;)"></textarea>
+    <div class="pg-output">
+      <div class="pg-output-label">Output</div>
+      <div id="pg-out"><span style="color:var(--text3)">Press Run to see output…</span></div>
+    </div>
+  </div>
+
+  <h3>Send Key Reference</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Send code</th>
+          <th>What it does</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>{Enter}</code></td>
+          <td>Press Enter/Return</td>
+        </tr>
+        <tr>
+          <td><code>{Tab}</code></td>
+          <td>Press Tab</td>
+        </tr>
+        <tr>
+          <td><code>{Backspace}</code></td>
+          <td>Backspace</td>
+        </tr>
+        <tr>
+          <td><code>{Delete}</code></td>
+          <td>Delete key</td>
+        </tr>
+        <tr>
+          <td><code>{Up}/{Down}</code></td>
+          <td>Arrow keys</td>
+        </tr>
+        <tr>
+          <td><code>{F1}–{F12}</code></td>
+          <td>Function keys</td>
+        </tr>
+        <tr>
+          <td><code>^c</code></td>
+          <td>Ctrl+C (copy)</td>
+        </tr>
+        <tr>
+          <td><code>^v</code></td>
+          <td>Ctrl+V (paste)</td>
+        </tr>
+        <tr>
+          <td><code>+{Home}</code></td>
+          <td>Shift+Home (select to line start)</td>
+        </tr>
+        <tr>
+          <td><code>{a 5}</code></td>
+          <td>Press 'a' 5 times</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<!-- ── TRAY ICON & MENU ── -->
+<div class="lesson" id="lesson-tray">
+  <h2>Tray Icon &amp; Menu 🎛️</h2>
+  <p class="section-desc">Hey there! AutoHotkey scripts naturally run in the background, represented by that little green "H" icon in the Windows system tray. But why stick to the boring default? In this lesson, I'll show you how to change the icon, set custom hover tips, and build a full right-click context menu so your tool feels like a premium app.</p>
+
+  <h3>1. Custom Tooltips (A_IconTip)</h3>
+  <p>When users hover their mouse over your tray icon, they should see something useful. Use <code>A_IconTip</code> to set a custom hover description.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Set custom tray hover text
+A_IconTip := "AV Macro Automation v2.4`nStatus: Running"</code></pre>
+  </div>
+
+  <h3>2. Custom Tray Icons (TraySetIcon)</h3>
+  <p>To change the icon, call <code>TraySetIcon(FileName, IconNumber)</code>. You can reference any `.ico` file, or pull icons directly from Windows DLL files (like <code>shell32.dll</code> or <code>imageres.dll</code>)!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Use Windows shell32.dll icon #44 (a green shield icon)
+TraySetIcon("shell32.dll", 44)
+
+; Or use your own custom ico file:
+; TraySetIcon(A_ScriptDir . "\assets\app.ico")</code></pre>
+  </div>
+
+  <h3>3. Custom Right-Click Menus (A_TrayMenu)</h3>
+  <p>The <code>A_TrayMenu</code> object controls the menu that pops up when you right-click the tray icon. You can clear the default items, add custom features, bind them to functions, and keep standard items like "Reload" and "Exit" for easy control.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">#SingleInstance Force
+
+; Step 1: Wipe the default right-click menu items
+A_TrayMenu.Delete()
+
+; Step 2: Add custom menu items and bind them to functions
+; Syntax: A_TrayMenu.Add(ItemName, CallbackFunction)
+A_TrayMenu.Add("Show App Info", ShowInfo)
+A_TrayMenu.Add("Run Automation", StartMacro)
+
+; Add a separator line
+A_TrayMenu.Add()
+
+; Step 3: Keep the standard reload/exit options (extremely helpful!)
+A_TrayMenu.AddStandard()
+
+; Callback functions (must accept at least 1 parameter or use a * wildcard)
+ShowInfo(itemName, itemPos, menuObj) {
+    MsgBox("AV Automation Hub`nDesigned in AHK v2 by Eclipse.", "About App", "Iconi")
+}
+
+StartMacro(*) {
+    TrayTip("Starting Macro...", "AV Macro", "Iconi")
+    ; Place your macro execution call here!
+}</code></pre>
+  </div>
+
+  <div class="card info-card">
+    <div class="card-title">💡 My Professional Tray Template</div>
+    <p>If you want a menu option to toggle a setting (and show a checkmark next to it in the menu!), use the <code>ToggleCheck</code> method on the menu object. Here is how I write a professional settings toggle in the tray:</p>
+    <pre><code class="language-autohotkey">#SingleInstance Force
+
+isMuted := false
+A_TrayMenu.Delete()
+A_TrayMenu.Add("Mute Sound Alerts", ToggleMute)
+A_TrayMenu.AddStandard()
+
+ToggleMute(itemName, itemPos, menuObj) {
+    global isMuted
+    isMuted := !isMuted ; Invert boolean
+    
+    if isMuted {
+        menuObj.Check(itemName) ; Add a checkmark next to it!
+        TrayTip("Sound alerts disabled.", "System Muted")
+    } else {
+        menuObj.Uncheck(itemName) ; Remove checkmark
+        TrayTip("Sound alerts enabled.", "System Active")
+    }
+}</code></pre>
+  </div>
+</div>

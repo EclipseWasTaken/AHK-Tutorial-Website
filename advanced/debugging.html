@@ -1,0 +1,94 @@
+<!-- ── DEBUGGING TIPS ── -->
+<div class="lesson" id="lesson-debugging">
+  <h2>Debugging Tips 🐞</h2>
+  <p class="section-desc">Hey! In this final lesson, I want to teach you the most important skill in programming: <strong>Debugging</strong>. Writing code is only half the battle; the other half is figuring out why it doesn't work when it breaks. Let's stop guessing, throw away buggy MsgBox debugs, and learn to inspect our code like professionals.</p>
+
+  <h3>1. OutputDebug (Your Best Friend)</h3>
+  <div class="card info-card">
+    <div class="card-title">💡 Stop Using MsgBox to Debug!</div>
+    <p>Using <code>MsgBox(myVar)</code> to check variable states is a terrible habit. A MsgBox <strong>pauses script execution</strong>, which ruins game macros, breaks timers, and stops inputs. If you are debugging loops, you'll be stuck clicking "OK" infinitely!</p>
+    <p><strong>The Professional Way:</strong> Use <code>OutputDebug()</code>. It sends text silently directly to the VS Code Debug Console or a tool like Sysinternals DebugView. Your script doesn't freeze, and you get a complete scrollable log!</p>
+  </div>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">Loop 5 {
+    ; Logs progress silently to the VS Code console
+    OutputDebug("Loop index: " . A_Index . " running background scan.`n")
+    Sleep(100)
+}</code></pre>
+  </div>
+
+  <h3>2. ToolTip as a Live HUD Inspector</h3>
+  <p>If you are writing a script that tracks coordinates or inspects screen states in real-time, you need a visual HUD. I always use <code>ToolTip()</code> as a temporary floating text box near the mouse cursor to display active data!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Hit Ctrl+Shift+S to toggle a live mouse coordinate tracker
+^+s::
+{
+    static active := false
+    active := !active
+    
+    if active {
+        SetTimer(TrackMouse, 50) ; Run tracker every 50ms
+    } else {
+        SetTimer(TrackMouse, 0)  ; Turn off timer
+        ToolTip()                ; Clear active ToolTip
+    }
+}
+
+TrackMouse() {
+    MouseGetPos(&mX, &mY, &mWin, &mControl)
+    winTitle := WinGetTitle("ahk_id " . mWin)
+    
+    ; Display a floating inspector block right next to the cursor
+    ToolTip("Mouse coordinates:`n"
+          . "X: " . mX . " | Y: " . mY . "`n"
+          . "Active Window: " . winTitle . "`n"
+          . "Hover Control: " . mControl)
+}</code></pre>
+  </div>
+
+  <h3>3. The Top 5 Beginner Mistakes &amp; How to Spot Them</h3>
+  <p>If your script behaves weirdly, check this checklist first. 90% of beginner bugs fall into one of these buckets:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>The Bug</th>
+          <th>What's wrong</th>
+          <th>The Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Wrong Coords</strong></td>
+          <td>Clicking in the wrong place or pixel search failing.</td>
+          <td>You forgot CoordMode! Set <code>CoordMode("Mouse", "Client")</code> and <code>CoordMode("Pixel", "Client")</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Assignment `=`</strong></td>
+          <td><code>myVar = 42</code> makes a string, not assignment.</td>
+          <td>In v2, always use <code>:=</code> for assignment (e.g. <code>myVar := 42</code>).</td>
+        </tr>
+        <tr>
+          <td><strong>Unquoted Strings</strong></td>
+          <td><code>name := Alice</code> looks for a variable, not the string "Alice".</td>
+          <td>Always wrap literal text in double quotes (e.g. <code>name := "Alice"</code>).</td>
+        </tr>
+        <tr>
+          <td><strong>Scoping issues</strong></td>
+          <td>Variables inside functions are empty/lost.</td>
+          <td>If trying to edit a global variable inside a function, declare <code>global varName</code> first!</td>
+        </tr>
+        <tr>
+          <td><strong>Type mismatches</strong></td>
+          <td><code>"42" == 42</code> evaluates to false.</td>
+          <td>Convert types explicitly using <code>Integer()</code>, <code>Float()</code>, or <code>String()</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

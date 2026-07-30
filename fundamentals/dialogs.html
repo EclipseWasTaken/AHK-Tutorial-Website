@@ -1,0 +1,57 @@
+<!-- ── MSGBOX & DIALOGS ── -->
+<div class="lesson" id="lesson-dialogs">
+  <h2>MsgBox &amp; Input Dialogs 💬</h2>
+  <p class="section-desc">Hey there! When you build automation scripts, you often need to communicate with your user. Whether it's asking a Yes/No question, asking them to type in some text, or letting them select a file, AHK v2 makes it incredibly easy with built-in dialogs.</p>
+
+  <h3>1. MsgBox with Buttons and Icons</h3>
+  <p>In AHK v2, <code>MsgBox</code> is a function. If you just pass a string, it shows a simple "OK" dialog. But you can also pass options to add buttons (Yes, No, Cancel) and icons (Warning, Question, Error) and capture what the user clicks!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Syntax: MsgBox(Text, Title, Options)
+; Options: "YesNo" or "YN", "YesNoCancel", "Iconi" (Info), "Icon!" (Warning), "Iconx" (Error)
+result := MsgBox("Do you want to continue?", "Confirmation Required", "YesNo Icon?")
+
+if (result == "Yes") {
+    MsgBox("You pressed Yes! Moving forward.")
+} else {
+    MsgBox("You clicked No! Aborting.", "Cancelled", "Iconx")
+}</code></pre>
+  </div>
+
+  <h3>2. InputBox (Getting User Input)</h3>
+  <p>Need the user to type in a name, a search term, or a password? Use <code>InputBox()</code>. It returns an object with a <code>Value</code> (what they typed) and a <code>Result</code> (whether they pressed OK or Cancel).</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Syntax: InputBox(Prompt, Title, Options)
+userInput := InputBox("Please enter your name:", "User Settings")
+
+if (userInput.Result == "Cancel") {
+    MsgBox("No name entered, operation cancelled.")
+} else {
+    MsgBox("Welcome, " . userInput.Value . "!")
+}</code></pre>
+  </div>
+
+  <h3>3. FileSelect (Letting Users Choose Files)</h3>
+  <p>Stop hardcoding file paths! It makes your scripts useless on other computers. Use <code>FileSelect()</code> to open a beautiful native Windows file dialog and let the user select a file or folder.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Syntax: FileSelect(Options, RootDir, Title, Filter)
+; Option 1: File must exist. Filter: restrict to Text files.
+selectedFile := FileSelect(1, , "Select your configuration file", "Text Documents (*.txt; *.ini)")
+
+if (selectedFile == "") {
+    MsgBox("You didn't select anything!")
+} else {
+    MsgBox("You selected: " . selectedFile)
+}</code></pre>
+  </div>
+
+  <div class="card info-card">
+    <div class="card-title">💡 My Golden Rule for Dialogs</div>
+    <p>Whenever you write a script that processes files, <strong>always</strong> use <code>FileSelect()</code> or use <code>A_ScriptDir</code> to resolve relative paths. This ensures that your script will run perfectly even if you move it, share it, or compile it into an EXE!</p>
+  </div>
+</div>

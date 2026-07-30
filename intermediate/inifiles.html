@@ -1,0 +1,88 @@
+<!-- ── INI FILES & SETTINGS ── -->
+<div class="lesson" id="lesson-inifiles">
+  <h2>Ini Files &amp; Settings 💾</h2>
+  <p class="section-desc">Hey! In this lesson, we will solve a huge problem: script amnesia. By default, when a script reloads, all your variables are reset. If you want your hotkeys or UI positions to persist, you need a way to save configuration settings. The classic Windows way is using INI files.</p>
+
+  <h3>What is an INI File?</h3>
+  <p>An INI file is a simple, structured text file broken into <strong>[Sections]</strong> and <strong>Keys = Values</strong>. It looks like this:</p>
+  <pre><code>[WindowSettings]
+Width=800
+Height=600
+
+[UserSettings]
+Username=Eclipse
+AutoStart=1</code></pre>
+
+  <h3>1. Writing Settings (IniWrite)</h3>
+  <p>To save a value, call <code>IniWrite(Value, Filename, Section, Key)</code>. AHK will create the file and the sections automatically if they don't exist!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Set path to a config file in the same directory as the script
+configPath := A_ScriptDir . "\settings.ini"
+
+; Save some values
+IniWrite(1080, configPath, "Display", "Resolution")
+IniWrite(true, configPath, "Features", "DarkMode")
+MsgBox("Preferences saved to settings.ini!")</code></pre>
+  </div>
+
+  <h3>2. Reading Settings (IniRead)</h3>
+  <p>To load a value, call <code>IniRead(Filename, Section, Key, DefaultValue)</code>. Always specify a default value in case the key or file is missing!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">configPath := A_ScriptDir . "\settings.ini"
+
+; Load values (Defaulting if settings.ini isn't created yet)
+res := IniRead(configPath, "Display", "Resolution", 720)
+darkMode := IniRead(configPath, "Features", "DarkMode", false)
+
+MsgBox("Resolution: " . res . "`nDark Mode: " . (darkMode ? "Enabled" : "Disabled"))</code></pre>
+  </div>
+
+  <h3>3. Deleting Settings (IniDelete)</h3>
+  <p>If you want to clear a setting or wipe a whole section, use <code>IniDelete()</code>.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">configPath := A_ScriptDir . "\settings.ini"
+
+; Delete a single key
+IniDelete(configPath, "Display", "Resolution")
+
+; Delete an entire section (removes [Display] and everything under it)
+IniDelete(configPath, "Display")</code></pre>
+  </div>
+
+  <div class="card info-card">
+    <div class="card-title">💡 My Persistence Blueprint</div>
+    <p>Here is how I structure a real, professional GUI script that remembers its size and position between restarts. Copy this template for your own tools!</p>
+    <pre><code class="language-autohotkey">#SingleInstance Force
+iniFile := A_ScriptDir . "\window_state.ini"
+
+; 1. Load previous coordinates (default to center if not found)
+posX := IniRead(iniFile, "Layout", "X", "Center")
+posY := IniRead(iniFile, "Layout", "Y", "Center")
+
+; 2. Create the GUI
+myGui := Gui("+Resize", "My Persistent Window")
+myGui.AddText("w200 h100", "Move or resize this window, close it, and run it again. It will remember exactly where you left it!")
+
+; 3. Handle the close event to save state
+myGui.OnEvent("Close", SaveState)
+myGui.Show((posX == "Center" ? "" : "x" . posX . " y" . posY))
+
+SaveState(*) {
+    global myGui, iniFile
+    ; Get current window position coordinates
+    myGui.GetPos(&outX, &outY, &outW, &outH)
+    
+    ; Write current coordinates to INI
+    IniWrite(outX, iniFile, "Layout", "X")
+    IniWrite(outY, iniFile, "Layout", "Y")
+    
+    ExitApp()
+}</code></pre>
+  </div>
+</div>

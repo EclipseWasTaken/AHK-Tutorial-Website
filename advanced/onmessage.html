@@ -1,0 +1,73 @@
+<!-- ── ONMESSAGE & WINDOWS MESSAGES ── -->
+<div class="lesson" id="lesson-onmessage">
+  <h2>OnMessage &amp; Windows Messages 📡</h2>
+  <p class="section-desc">Hey there! Welcome to one of the most powerful system-level features in AutoHotkey: <strong>OnMessage</strong>. Behind the scenes, Windows communicates with applications by sending millions of "Windows Messages" (integers representing events). Using <code>OnMessage()</code>, your script can intercept these OS-level signals to react to mouse drags, window closures, system shutdowns, and even hardware plug-ins!</p>
+
+  <h3>What is a Windows Message?</h3>
+  <p>Every time you click, drag, resize, plug in a USB, or turn off your PC, Windows broadcasts a hex code message. For example:</p>
+  <ul>
+    <li><code>0x0201</code> ➜ Left Mouse Button Down (WM_LBUTTONDOWN)</li>
+    <li><code>0x0010</code> ➜ Window Close Request (WM_CLOSE)</li>
+    <li><code>0x0219</code> ➜ Hardware Device Changed (e.g. USB insert/remove) (WM_DEVICECHANGE)</li>
+  </ul>
+
+  <h3>1. Dragging a Borderless GUI (The Best UI Trick!)</h3>
+  <p>Standard Windows forms have boring default title bars. If you build a sleek, premium, borderless glassmorphism GUI, you lose the ability to drag and move the window. By intercepting <code>0x0201</code> (Left Click Down), you can trick Windows into thinking the user is dragging the title bar, allowing them to drag your borderless window from *anywhere* on the form!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">#SingleInstance Force
+
+; Create a borderless, premium GUI
+myGui := Gui("-Caption +AlwaysOnTop") 
+myGui.BackColor := "13161b"
+myGui.AddText("cwhite w250 h100 Center", "`nSleek Borderless App`n`nClick and drag anywhere to move me!`n`nPress ESC to close.")
+
+; Listen for left click down on the GUI
+OnMessage(0x0201, WM_LBUTTONDOWN)
+
+myGui.Show()
+
+WM_LBUTTONDOWN(wParam, lParam, msg, hwnd) {
+    ; Send the Windows API message 0xA1 (WM_NCLBUTTONDOWN) with parameter 2 (HTCAPTION)
+    ; This tricks Windows into starting a window drag!
+    PostMessage(0xA1, 2, , hwnd)
+}
+
+Esc:: ExitApp()</code></pre>
+  </div>
+
+  <h3>2. Intercepting Close Requests (WM_CLOSE)</h3>
+  <p>If your script is running complex automation loops or managing system connections, you don't want a sudden GUI close or system restart to corrupt data. You can intercept the close request to ask for confirmation or perform essential cleanup!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Intercept WM_CLOSE (0x0010)
+OnMessage(0x0010, InterceptClose)
+
+InterceptClose(wParam, lParam, msg, hwnd) {
+    confirm := MsgBox("Are you sure you want to exit and stop all background macros?", "Confirm Exit", "YesNo Icon!")
+    if (confirm == "No") {
+        return 0 ; returning 0 discards the message, preventing the window/script from closing!
+    }
+    ; Let the script exit naturally (returns blank or 1)
+}</code></pre>
+  </div>
+
+  <h3>3. Detecting USB Device Insertion</h3>
+  <div class="card info-card">
+    <div class="card-title">🔌 Hardware Plug-In Listener</div>
+    <p>Want your script to automatically run a backup when you plug in a specific USB drive? Or beep when a device disconnects? Intercept <code>0x0219</code> (WM_DEVICECHANGE):</p>
+    <pre><code class="language-autohotkey">OnMessage(0x0219, WM_DEVICECHANGE)
+
+WM_DEVICECHANGE(wParam, lParam, msg, hwnd) {
+    ; wParam = 0x8000 (DBT_DEVICEARRIVAL - device inserted)
+    ; wParam = 0x8004 (DBT_DEVICEREMOVECOMPLETE - device removed)
+    if (wParam == 0x8000) {
+        SoundBeep(800, 100)
+        SoundBeep(1000, 150)
+        TrayTip("Hardware Detected!", "USB Device Connected")
+    }
+}</code></pre>
+  </div>
+</div>

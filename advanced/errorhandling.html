@@ -1,0 +1,217 @@
+  <!-- ── ERROR HANDLING ── -->
+  <div class="lesson" id="lesson-errorhandling">
+    <h2>Error Handling</h2>
+    <p class="section-desc">Real scripts encounter the unexpected — files that don't exist, windows that don't open, or invalid input. Error handling lets you catch problems gracefully and decide what to do instead of crashing.</p>
+    <span class="tag tag-adv">Advanced</span>
+
+    <h3>What is an Error?</h3>
+    <p>In AHK v2, errors are <strong>thrown objects</strong>. When something goes wrong, AHK creates an error object and "throws" it up through your code. If nothing catches it, the script shows an error dialog and stops. With <code>try/catch, you intercept the error and handle it yourself.</code></p>
+    <div class="card info-card">
+      <div class="card-title">🏀 Think of it like a ball</div>
+      <p><code>throw</code> throws the ball. <code>try</code> is the room where things might go wrong. <code>catch</code> catches the ball if it was thrown. <code>finally</code> always runs — whether the ball was thrown or not. <code>else</code> runs only if nothing was thrown (no errors).</p>
+    </div>
+
+    <h3>Basic try / catch</h3>
+    <p>Wrap risky code in a <code>try block. If it throws, execution jumps to the </code><code>catch block immediately.</code></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Without error handling — our script will crash if the file is missing
+content := FileRead("C:\nonexistent.txt")  ; ❌ throws!
+
+; With error handling — we catch the problem
+try
+{
+    content := FileRead("C:\nonexistent.txt")
+    MsgBox("File loaded: " . content)
+}
+catch Error as err
+{
+    MsgBox("Something went wrong: " . err.Message)
+}</code></pre>
+    </div>
+
+    <h3>The Error Object</h3>
+    <p>The <code>catch</code> variable (called <code>err</code> above, but you can name it anything) is an object with useful properties:</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Property</th><th>What it contains</th><th>Example value</th></tr></thead>
+        <tbody>
+          <tr><td><code>err.Message</code></td><td>A human-readable description of the error</td><td><code>"The system cannot find the file"</code></td></tr>
+          <tr><td><code>err.What</code></td><td>What caused the error (function name, etc.)</td><td><code>"FileRead"</code></td></tr>
+          <tr><td><code>err.Extra</code></td><td>Extra context about the error</td><td><code>"C:\nonexistent.txt"</code></td></tr>
+          <tr><td><code>err.File</code></td><td>Script file where the error occurred</td><td><code>"C:\MyScript.ahk"</code></td></tr>
+          <tr><td><code>err.Line</code></td><td>Line number in the script</td><td><code>42</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">try
+{
+    FileRead("C:\missing.txt")
+}
+catch Error as err
+{
+    MsgBox(
+        "Error: "    . err.Message  . "`n" .
+        "In: "      . err.What     . "`n" .
+        "Detail: "  . err.Extra    . "`n" .
+        "At line: " . err.Line
+    )
+}</code></pre>
+    </div>
+
+    <h3>try / catch / else</h3>
+    <p>The <code>else block runs only when the </code><code>try</code> block completes <strong>without</strong> any error. It's the "happy path" after your risky code:</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">try
+{
+    content := FileRead("C:\data.txt")
+}
+catch Error as err
+{
+    ; This runs ONLY if FileRead threw an error
+    MsgBox("Failed to read file: " . err.Message)
+}
+else
+{
+    ; This runs ONLY if no error was thrown
+    MsgBox("File contents: " . content)
+}</code></pre>
+    </div>
+
+    <h3>try / catch / finally</h3>
+    <p>The <code>finally block </code><strong>always runs</strong>, regardless of whether an error occurred. Use it for cleanup — closing files, showing a "done" tooltip, re-enabling things you disabled:</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">ToolTip("Working...")   ; show status
+
+try
+{
+    content := FileRead("C:\report.txt")
+    MsgBox("Loaded: " . content)
+}
+catch Error as err
+{
+    MsgBox("Error: " . err.Message)
+}
+finally
+{
+    ; Runs no matter what — I use this to clear the tooltip
+    ToolTip()
+    MsgBox("Operation complete (success or fail).")
+}</code></pre>
+    </div>
+    <div class="card info-card">
+      <div class="card-title">🧹 When to use finally</div>
+      <p>Great for releasing resources: closing file handles, clearing a status tooltip, re-enabling a hotkey, or resetting a flag. Even if your catch block has a <code>return</code>, the <code>finally</code> block still runs before the function actually returns.</p>
+    </div>
+
+    <h3>throw — Raise your own errors</h3>
+    <p>You can create and throw your own errors using <code>throw. This is useful for validating inputs or signalling that something in your own code went wrong:</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Throw a built-in Error object
+Divide(a, b) {
+    if (b == 0)
+        throw ValueError("Cannot divide by zero!")
+    return a / b
+}
+
+try
+{
+    result := Divide(10, 0)
+}
+catch ValueError as err
+{
+    MsgBox("Caught: " . err.Message)  ; "Cannot divide by zero!"
+}</code></pre>
+    </div>
+
+    <h3>Built-in Error Types</h3>
+    <p>AHK v2 has several error sub-types. You can <code>catch</code> a specific type to handle different errors differently:</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Error Type</th><th>Thrown when</th></tr></thead>
+        <tbody>
+          <tr><td><code>Error</code></td><td>The base type — catches everything</td></tr>
+          <tr><td><code>ValueError</code></td><td>A value is invalid (e.g. wrong type, out of range)</td></tr>
+          <tr><td><code>TypeError</code></td><td>Wrong type passed to a function</td></tr>
+          <tr><td><code>OSError</code></td><td>Operating system / file system failure</td></tr>
+          <tr><td><code>MemoryError</code></td><td>Out of memory</td></tr>
+          <tr><td><code>TimeoutError</code></td><td>An operation timed out</td></tr>
+          <tr><td><code>TargetError</code></td><td>Target window/control not found</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">try
+{
+    WinActivate("ahk_exe doesnotexist.exe")
+}
+catch TargetError as err
+{
+    MsgBox("Window not found: " . err.Message)
+}
+catch OSError as err
+{
+    MsgBox("OS error: " . err.Message)
+}
+catch Error as err
+{
+    ; Catch-all for anything else
+    MsgBox("Unexpected error: " . err.Message)
+}</code></pre>
+    </div>
+
+    <h3>Real-World Example — Safe File Processor</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">#Requires AutoHotkey >= 2.0
+#SingleInstance Force
+
+ProcessFile(path) {
+    if !FileExist(path)
+        throw ValueError("File not found: " . path)
+
+    try
+    {
+        content := FileRead(path)
+        lines   := StrSplit(content, "`n")
+        MsgBox("Lines in file: " . lines.Length)
+    }
+    catch OSError as err
+    {
+        MsgBox("Couldn't read file — maybe it's locked?`n" . err.Message)
+    }
+    finally
+    {
+        ToolTip()  ; always clear any tooltip
+    }
+}
+
+^F3::
+{
+    try
+    {
+        ProcessFile("C:\data.txt")
+    }
+    catch ValueError as err
+    {
+        MsgBox("Input error: " . err.Message)
+    }
+}</code></pre>
+    </div>
+
+    <div class="card tip-card">
+      <div class="card-title">✅ Best Practices</div>
+      <ul>
+        <li>Always catch the <strong>most specific</strong> error type first, then fall back to a generic <code>Error</code> catch.</li>
+        <li>Never swallow errors silently — at minimum, log them with <code>FileAppend() so you can debug later.</code></li>
+        <li>Use <code>finally</code> for cleanup so your UI never gets stuck in a "loading" state.</li>
+        <li>Validate inputs <strong>before</strong> doing risky operations, then use <code>throw</code> to signal problems early.</li>
+      </ul>
+    </div>
+  </div>

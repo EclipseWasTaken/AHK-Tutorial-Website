@@ -1,0 +1,65 @@
+  <!-- ── SYNTAX ── -->
+  <div class="lesson" id="lesson-syntax">
+    <h2>Basic Syntax</h2>
+    <p class="section-desc">AHK v2 cleaned up v1's messy syntax. Here's what you need to write valid code.</p>
+    <h3>Comments</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Single-line comment
+/*
+   Multi-line
+   comment
+*/
+
+x := 5  ; Inline comment after code</code></pre>
+    </div>
+    <h3>Assignments &amp; Expressions</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">name    := "Alice"
+age     := 30
+isAdmin := true
+pi      := 3.14159
+
+; Compound operators
+count := 0
+count++          ; count = 1
+count += 9        ; count = 10
+count *= 2        ; count = 20
+
+; String concatenation uses a dot
+greeting := "Hello, " . name  ; "Hello, Alice"</code></pre>
+    </div>
+    <h3>Function Calls</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; v2 ALWAYS uses parentheses for calls
+MsgBox("Hello World")
+Sleep(1000)
+Send("{Enter}")
+result := StrLen(name)
+
+; MsgBox with title and buttons
+MsgBox("Are you sure?", "Confirm", "YesNo")</code></pre>
+    </div>
+    <h3>Auto-Execute Section</h3>
+    <div class="card warn-card">
+      <div class="card-title">⚠️ Important</div>
+      <p>Code at the top of the script (before any hotkey definitions) runs once on startup. Put initialization, <code>#Requires, and </code><code>#SingleInstance here.</code></p>
+    </div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Auto-execute (runs on startup)
+#Requires AutoHotkey >= 2.0
+#SingleInstance Force
+
+MsgBox("Script started!")
+myVar := "initialized"
+
+; Hotkeys below
+^h::
+{
+    MsgBox(myVar)
+}</code></pre>
+    </div>
+  </div>

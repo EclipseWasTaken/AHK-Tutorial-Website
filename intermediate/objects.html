@@ -1,0 +1,64 @@
+<!-- ── OBJECTS & MAPS ── -->
+<div class="lesson" id="lesson-objects">
+  <h2>Objects &amp; Maps 🗺️</h2>
+  <p class="section-desc">Hey! In this lesson, we will look at how to store structured data. While arrays (which we covered in our Fundamentals section) are great for simple ordered lists, <strong>Objects</strong> and <strong>Maps</strong> let you associate names directly with values. This is essential for storing configurations or mapping complex slot settings!</p>
+
+  <h3>1. Objects vs. Maps: Which One Should You Use?</h3>
+  <div class="card info-card">
+    <div class="card-title">💡 My Rule of Thumb</div>
+    <p>In AHK v2, Objects and Maps look similar but have a huge internal difference:</p>
+    <ul>
+      <li><strong>Objects (<code>{}</code>):</strong> Great for static records or configs where keys are hardcoded variables. You access keys using dot notation (e.g. <code>config.width</code>).</li>
+      <li><strong>Maps (<code>Map()</code>):</strong> Best for dynamic lists where keys are strings or numbers, and are added, checked, or removed dynamically. You access keys using bracket notation (e.g. <code>myMap["key"]</code>).</li>
+    </ul>
+  </div>
+
+  <h3>2. AutoHotkey Objects</h3>
+  <p>Objects are extremely fast and lightweight. You define them using curly braces, and you can immediately read or write to their properties:</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Define a static configuration object
+config := {
+    width: 800,
+    height: 600,
+    title: "My Macro UI"
+}
+
+; Read properties
+MsgBox("Window Size: " . config.width . "x" . config.height)
+
+; Modify properties on the fly
+config.title := "New Title"
+MsgBox("App Title: " . config.title)</code></pre>
+  </div>
+
+  <h3>3. Key-Value Maps</h3>
+  <p>Maps are proper hash tables. If you need to check if a key exists, delete keys, or loop through key-value pairs, <strong>always</strong> use a Map!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Create a Map
+userData := Map("name", "Eclipse", "role", "Admin")
+
+; Insert or modify a key
+userData["active"] := true
+userData["city"] := "Delhi"
+
+; Read keys (Note: brackets are mandatory!)
+MsgBox("User Name: " . userData["name"])
+
+; Check if a key exists before reading (crashes if key doesn't exist!)
+if userData.Has("city") {
+    MsgBox("User resides in: " . userData["city"])
+}
+
+; Delete a key
+userData.Delete("role")
+
+; Loop through all key-value pairs
+for key, value in userData {
+    MsgBox("Key: " . key . " ➜ Value: " . value)
+}</code></pre>
+  </div>
+</div>

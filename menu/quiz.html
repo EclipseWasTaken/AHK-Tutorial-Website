@@ -1,0 +1,23 @@
+<div class="section" id="section-quiz">
+  <h2>Knowledge Quiz</h2>
+  <p class="section-desc">10 questions covering all skill levels — including the new pixel conditions lesson.</p>
+  <div id="quiz-area">
+    <div class="quiz-progress">
+      <span id="qnum">Question 1 of 10
+      <div class="quiz-bar"><div class="quiz-fill" id="qfill" style="width:10%"></div></div>
+      <span class="quiz-score">Score: <span id="qscore">0
+    </div>
+    <div class="card" style="padding:1.5rem">
+      <div class="quiz-q" id="qq"></div>
+      <div class="quiz-opts" id="qopts"></div>
+      <div class="quiz-result" id="qres"></div>
+      <button class="quiz-next" id="qnext" onclick="nextQuestion()">Next question →</button>
+    </div>
+  </div>
+  <div id="quiz-done">
+    <div class="score-big" id="final-score">0</div>
+    <h3>out of 10</h3>
+    <p style="color:var(--text2);margin-top:.5rem" id="final-msg"></p>
+    <button class="quiz-restart" onclick="startQuiz()">Retake Quiz</button>
+  </div>
+</div>

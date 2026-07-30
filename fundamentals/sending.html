@@ -1,0 +1,195 @@
+  <!-- ── SENDING KEYSTROKES & CLICKS ── -->
+  <div class="lesson" id="lesson-sending">
+    <h2>Sending Keystrokes &amp; Clicks</h2>
+    <p class="section-desc">AHK can simulate anything a human can type or click — pressing keys, holding modifiers, moving the mouse, and clicking buttons in other apps. This is one of AHK's most powerful features.</p>
+
+    <h3>The Three Send Modes</h3>
+    <p>There are three versions of <code>Send. Knowing when to use each one matters:</code></p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>What it does</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td><code>Send()</code></td><td>Sends keystrokes interpreting special keys like <code>{Enter}</code></td><td>Most situations</td></tr>
+          <tr><td><code>SendText()</code></td><td>Sends text literally — no special key parsing</td><td>Typing strings with symbols like <code>!</code> or <code>^</code></td></tr>
+          <tr><td><code>SendInput()</code></td><td>Fastest and most reliable mode, same syntax as Send</td><td>Speed-critical scripts</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card info-card">
+      <div class="card-title">💡 Why does this matter?</div>
+      <p>With <code>Send(), the </code><code>!</code> character means <strong>Alt</strong>. So <code>Send("!f")</code> presses <strong>Alt+F</strong>, not the letter "!f". If you just want to type an exclamation mark, use <code>SendText("!") instead.</code></p>
+    </div>
+
+    <h3>Sending Plain Text</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Let's type a greeting into whatever is focused
+Send("Hello, World!")
+
+; I suggest using SendText as it's safer for special characters
+SendText("Price: $9.99 (50% off!)")
+
+; Practical: auto-fill an email signature
+^+s::   ; Ctrl+Shift+S
+{
+    Send("Best regards,{Enter}John Doe{Enter}john@example.com")
+}</code></pre>
+    </div>
+
+    <h3>Special Key Names Inside { }</h3>
+    <p>Any key that isn't a normal letter or number needs to be wrapped in <code>{ }</code> curly braces inside a Send string.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>What you write</th><th>What key it sends</th></tr></thead>
+        <tbody>
+          <tr><td><code>{Enter}</code></td><td>The Enter / Return key</td></tr>
+          <tr><td><code>{Tab}</code></td><td>The Tab key</td></tr>
+          <tr><td><code>{Space}</code></td><td>Spacebar (use when spaces get trimmed)</td></tr>
+          <tr><td><code>{Backspace}</code></td><td>Delete the character to the left</td></tr>
+          <tr><td><code>{Delete}</code></td><td>The Delete key</td></tr>
+          <tr><td><code>{Escape}</code></td><td>Escape / Esc</td></tr>
+          <tr><td><code>{Up} {Down} {Left} {Right}</code></td><td>Arrow keys</td></tr>
+          <tr><td><code>{Home} {End}</code></td><td>Home / End keys</td></tr>
+          <tr><td><code>{F1} – {F12}</code></td><td>Function keys</td></tr>
+          <tr><td><code>{PgUp} {PgDn}</code></td><td>Page Up / Page Down</td></tr>
+          <tr><td><code>{PrintScreen}</code></td><td>Print Screen</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Modifier Keys (Ctrl, Alt, Shift, Win)</h3>
+    <p>Inside a Send string, modifier keys use the same shorthand symbols as hotkey definitions:</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Modifier key</th><th>Example</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>^</code></td><td>Ctrl</td><td><code>^c</code></td><td>Ctrl+C (copy)</td></tr>
+          <tr><td><code>!</code></td><td>Alt</td><td><code>!{F4}</code></td><td>Alt+F4 (close window)</td></tr>
+          <tr><td><code>+</code></td><td>Shift</td><td><code>+{Tab}</code></td><td>Shift+Tab (go backwards)</td></tr>
+          <tr><td><code>#</code></td><td>Win key</td><td><code>#d</code></td><td>Win+D (show desktop)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Select all text and copy it
+Send("^a")   ; Ctrl+A
+Send("^c")   ; Ctrl+C
+
+; Open a new browser tab
+Send("^t")   ; Ctrl+T
+
+; Alt+F4 closes the active window
+Send("!{F4}")
+
+; Type "Hello" with a capital H (Shift+h)
+Send("+h")
+Send("ello")</code></pre>
+    </div>
+
+    <h3>Repeating a Key Multiple Times</h3>
+    <p>You can press a key N times in one Send call using the syntax <code>{KeyName N}</code>:</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Press the down arrow 5 times
+Send("{Down 5}")
+
+; Delete 10 characters
+Send("{Backspace 10}")
+
+; Press Tab 3 times to jump 3 fields in a form
+Send("{Tab 3}")
+
+; Hold Shift while pressing Right 5 times (selects 5 chars)
+Send("+{Right 5}")</code></pre>
+    </div>
+
+    <h3>Holding Keys Down &amp; Releasing</h3>
+    <p>Use <code>{KeyName down}</code> and <code>{KeyName up}</code> to hold a key pressed across multiple other keystrokes:</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; We hold Alt, press Tab twice, then release Alt to cycle 2 windows
+Send("{Alt down}{Tab}{Tab}{Alt up}")
+
+; Hold Shift and click three keys (select a range)
+Send("{Shift down}{End}{Shift up}")  ; select to end of line</code></pre>
+    </div>
+    <div class="card tip-card">
+      <div class="card-title">💡 Good to know</div>
+      <p>Always pair every <code>{key down}</code> with a <code>{key up}</code>! If your script crashes in between, the key stays "stuck" down until you press it physically. Use <code>Send("{key up}") in your hotkey's cleanup or try/catch to be safe.</span></p>
+    </div>
+
+    <h3>Mouse Clicks with Click()</h3>
+    <p><code>Click() simulates a mouse click. You can specify coordinates, the button, and how many times to click.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Left-click at screen coordinates (100, 200)
+Click(100, 200)
+
+; Right-click at (500, 300)
+Click(500, 300, "Right")
+
+; Double-click
+Click(200, 400, "Left", 2)   ; 4th arg = click count
+
+; Click without moving the mouse (clicks current position)
+Click()
+
+; Left-click and hold (mouse down only)
+Click(300, 300, "Left", 1, "Down")
+Sleep(500)
+Click(300, 300, "Left", 1, "Up")</code></pre>
+    </div>
+
+    <h3>Moving the Mouse with MouseMove()</h3>
+    <p><code>MouseMove() glides the cursor to a position. The optional speed parameter (0–100) controls how fast it moves — 0 is instant, 2 is the default.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Move to (800, 400) at default speed
+MouseMove(800, 400)
+
+; Move instantly (speed = 0)
+MouseMove(100, 100, 0)
+
+; Move slowly (speed = 10, more human-like)
+MouseMove(600, 300, 10)
+
+; Move relative to current position
+MouseMove(50, 0, 2, "Relative")  ; 50px to the right</code></pre>
+    </div>
+
+    <h3>Real-World Example — Auto Form Filler</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">#Requires AutoHotkey >= 2.0
+#SingleInstance Force
+
+; Press Ctrl+F1 to fill in a form automatically
+^F1::
+{
+    ; Click the Name field
+    Click(400, 200)
+    Sleep(100)
+    SendText("Jane Smith")
+
+    ; Tab to next field
+    Send("{Tab}")
+    Sleep(100)
+    SendText("jane@example.com")
+
+    ; Tab to phone number
+    Send("{Tab}")
+    Sleep(100)
+    SendText("555-0100")
+
+    ; Press Enter to submit
+    Send("{Enter}")
+}</code></pre>
+    </div>
+
+    <div class="card warn-card">
+      <div class="card-title">⚠️ Coordinate Gotcha</div>
+      <p>Screen coordinates are measured from the <strong>top-left corner</strong> of your primary monitor. X increases going right, Y increases going down. If you have multiple monitors, coordinates can be negative or very large. Use AHK's built-in Window Spy tool (in the tray icon menu when AHK is running) to find exact pixel coordinates on your screen.</p>
+    </div>
+  </div>

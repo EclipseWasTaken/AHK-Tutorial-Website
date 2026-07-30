@@ -1,0 +1,66 @@
+<!-- ── RUN & PROCESSES ── -->
+<div class="lesson" id="lesson-run">
+  <h2>Run &amp; Processes 🚀</h2>
+  <p class="section-desc">Hey! In this lesson, we will look at how to control external applications. Running other programs, opening websites, checking if an app is currently open, and closing frozen windows are core tasks in any serious automation workflow.</p>
+
+  <h3>1. Launching Programs &amp; URLs (Run)</h3>
+  <p>The <code>Run()</code> function launches applications, documents, folders, or web links. You can also specify the working directory or parameters.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Launch Notepad
+Run("notepad.exe")
+
+; Launch a website in your default browser
+Run("https://www.autohotkey.com")
+
+; Launch with parameters (e.g. open a specific text file)
+Run('notepad.exe "C:\myFolder\log.txt"')
+
+; Run an app maximized
+Run("calc.exe", , "Max")</code></pre>
+  </div>
+
+  <h3>2. Waiting for Completion (RunWait)</h3>
+  <p>Sometimes, your script needs to run a tool (like a console command or installer) and wait for it to finish *before* executing the next line of code. For this, use <code>RunWait()</code>.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Open Calc, and pause script execution until Calc is closed by the user
+RunWait("calc.exe")
+MsgBox("Calculator was closed! Now running the next command.")</code></pre>
+  </div>
+
+  <h3>3. Process Checking and Terminating</h3>
+  <p>Need to check if a program is active in the background, or force close it if it freezes? Use <code>ProcessExist()</code> and <code>ProcessClose()</code>.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Check if Google Chrome is running
+if ProcessExist("chrome.exe") {
+    MsgBox("Chrome is open!")
+} else {
+    MsgBox("Chrome is NOT running.")
+}
+
+; Force terminate a specific process
+^!t::
+{
+    if ProcessExist("notepad.exe") {
+        ProcessClose("notepad.exe")
+        MsgBox("Force closed Notepad!")
+    }
+}</code></pre>
+  </div>
+
+  <h3>4. Running as Administrator (UAC elevation)</h3>
+  <div class="card info-card">
+    <div class="card-title">💡 My Admin Tip</div>
+    <p>If your script needs to click inside elevated programs (like Task Manager, Registry Editor, or certain video games), AHK will be blocked by Windows User Account Control (UAC) unless the script itself is running as Administrator!</p>
+    <p>Add this simple block at the top of your script to automatically relaunch it with Administrator privileges:</p>
+    <pre><code class="language-autohotkey">if !A_IsAdmin {
+    Run('*RunAs "' . A_ScriptFullPath . '"')
+    ExitApp()
+}</code></pre>
+  </div>
+</div>

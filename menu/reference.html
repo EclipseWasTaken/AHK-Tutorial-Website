@@ -1,0 +1,127 @@
+<div class="section" id="section-reference">
+  <div class="ref-content active" id="ref-hotkey-syms">
+    <h2>Hotkey Symbols</h2>
+    <p class="section-desc">Every modifier symbol and special key name.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Key</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><code>^</code></td><td>Ctrl</td><td>Both left and right Ctrl</td></tr>
+          <tr><td><code>!</code></td><td>Alt</td><td>Both left and right Alt</td></tr>
+          <tr><td><code>+</code></td><td>Shift</td><td>Both left and right Shift</td></tr>
+          <tr><td><code>#</code></td><td>Win key</td><td>Windows logo key</td></tr>
+          <tr><td><code>&lt;^</code></td><td>Left Ctrl only</td><td>Use &lt; or &gt; prefix for specific side</td></tr>
+          <tr><td><code>&gt;!</code></td><td>Right Alt (AltGr)</td><td>Useful for international keyboards</td></tr>
+          <tr><td><code>*</code></td><td>Wildcard</td><td>Fires even if other modifiers held</td></tr>
+          <tr><td><code>~</code></td><td>Passthrough</td><td>Native key function also fires</td></tr>
+          <tr><td><code>$</code></td><td>Keyboard hook</td><td>Prevents Send() from triggering it</td></tr>
+          <tr><td><code>UP</code></td><td>Key release</td><td><code>^a UP::</code> fires on release</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Mouse Hotkeys</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Button</th></tr></thead>
+        <tbody>
+          <tr><td><code>LButton</code></td><td>Left mouse button</td></tr>
+          <tr><td><code>RButton</code></td><td>Right mouse button</td></tr>
+          <tr><td><code>MButton</code></td><td>Middle / scroll wheel click</td></tr>
+          <tr><td><code>XButton1</code></td><td>4th button (back)</td></tr>
+          <tr><td><code>XButton2</code></td><td>5th button (forward)</td></tr>
+          <tr><td><code>WheelUp</code></td><td>Scroll wheel up</td></tr>
+          <tr><td><code>WheelDown</code></td><td>Scroll wheel down</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ref-content" id="ref-built-in-vars">
+    <h2>Built-in Variables</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>A_ScriptDir</code></td><td>Directory containing the script</td></tr>
+          <tr><td><code>A_ScriptName</code></td><td>Filename of the script</td></tr>
+          <tr><td><code>A_ScriptFullPath</code></td><td>Full path to the script</td></tr>
+          <tr><td><code>A_AppData</code></td><td>%AppData% path</td></tr>
+          <tr><td><code>A_Desktop</code></td><td>Desktop path</td></tr>
+          <tr><td><code>A_MyDocuments</code></td><td>My Documents path</td></tr>
+          <tr><td><code>A_WinDir</code></td><td>Windows directory</td></tr>
+          <tr><td><code>A_ProgramFiles</code></td><td>Program Files path</td></tr>
+          <tr><td><code>A_Now</code></td><td>Timestamp: YYYYMMDDHH24MISS</td></tr>
+          <tr><td><code>A_NowUTC</code></td><td>UTC timestamp</td></tr>
+          <tr><td><code>A_TickCount</code></td><td>Milliseconds since Windows started</td></tr>
+          <tr><td><code>A_Clipboard</code></td><td>Clipboard text (readable/writable)</td></tr>
+          <tr><td><code>A_Index</code></td><td>Loop iteration number</td></tr>
+          <tr><td><code>A_LoopFileName</code></td><td>Filename in a file loop</td></tr>
+          <tr><td><code>A_LoopFilePath</code></td><td>Full path in a file loop</td></tr>
+          <tr><td><code>A_ThisHotkey</code></td><td>Name of the triggering hotkey</td></tr>
+          <tr><td><code>A_PriorHotkey</code></td><td>Previously pressed hotkey</td></tr>
+          <tr><td><code>A_ScreenWidth</code></td><td>Primary screen width px</td></tr>
+          <tr><td><code>A_ScreenHeight</code></td><td>Primary screen height px</td></tr>
+          <tr><td><code>A_OSVersion</code></td><td>Windows version string</td></tr>
+          <tr><td><code>A_ComputerName</code></td><td>Computer name</td></tr>
+          <tr><td><code>A_UserName</code></td><td>Current Windows username</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ref-content" id="ref-directives">
+    <h2>Directives</h2>
+    <p class="section-desc">Start with <code>#</code> and configure script behavior at load time.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Directive</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>#Requires AutoHotkey &gt;= 2.0</code></td><td>Enforce minimum AHK version</td></tr>
+          <tr><td><code>#SingleInstance Force</code></td><td>Kill previous instance on reload</td></tr>
+          <tr><td><code>#SingleInstance Off</code></td><td>Allow multiple instances</td></tr>
+          <tr><td><code>#HotIf expression</code></td><td>Start context-sensitive hotkeys</td></tr>
+          <tr><td><code>#HotIf</code></td><td>End a #HotIf block</td></tr>
+          <tr><td><code>#Include filename</code></td><td>Include another script file</td></tr>
+          <tr><td><code>#MaxThreads N</code></td><td>Max simultaneous script threads</td></tr>
+          <tr><td><code>#NoTrayIcon</code></td><td>Hide the system tray icon</td></tr>
+          <tr><td><code>#Warn</code></td><td>Enable runtime warnings</td></tr>
+          <tr><td><code>#UseHook</code></td><td>Force keyboard hook for hotkeys</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ref-content" id="ref-functions-ref">
+    <h2>Common Functions</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>MsgBox(text, title, opts)</code></td><td>Show a message dialog</td></tr>
+          <tr><td><code>InputBox(prompt, title)</code></td><td>Show an input dialog</td></tr>
+          <tr><td><code>ToolTip(text, x, y, n)</code></td><td>Show a tooltip</td></tr>
+          <tr><td><code>TrayTip(text, title, opts)</code></td><td>Show a tray notification</td></tr>
+          <tr><td><code>Send(keys)</code></td><td>Simulate keystrokes</td></tr>
+          <tr><td><code>SendInput(keys)</code></td><td>Fast, reliable key sending</td></tr>
+          <tr><td><code>Click(x, y)</code></td><td>Mouse click at coordinates</td></tr>
+          <tr><td><code>MouseMove(x, y, speed)</code></td><td>Move mouse cursor</td></tr>
+          <tr><td><code>MouseGetPos(&amp;x, &amp;y)</code></td><td>Get cursor position</td></tr>
+          <tr><td><code>Sleep(ms)</code></td><td>Pause execution</td></tr>
+          <tr><td><code>Run(target)</code></td><td>Run a program or file</td></tr>
+          <tr><td><code>RunWait(target)</code></td><td>Run and wait for exit</td></tr>
+          <tr><td><code>WinActivate(title)</code></td><td>Bring window to foreground</td></tr>
+          <tr><td><code>WinClose(title)</code></td><td>Close a window</td></tr>
+          <tr><td><code>WinExist(title)</code></td><td>Returns HWND if window exists</td></tr>
+          <tr><td><code>WinWait(title,,secs)</code></td><td>Wait for window to appear</td></tr>
+          <tr><td><code>PixelSearch(&amp;x,&amp;y, x1,y1,x2,y2, color, var)</code></td><td>Search screen area for a color</td></tr>
+          <tr><td><code>PixelGetColor(x, y)</code></td><td>Get the color of a specific pixel</td></tr>
+          <tr><td><code>SetTimer(func, ms)</code></td><td>Call function repeatedly</td></tr>
+          <tr><td><code>Reload()</code></td><td>Restart current script</td></tr>
+          <tr><td><code>ExitApp()</code></td><td>Terminate script</td></tr>
+          <tr><td><code>FileRead(filename)</code></td><td>Read file to string</td></tr>
+          <tr><td><code>FileAppend(text, file)</code></td><td>Write/append to file</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

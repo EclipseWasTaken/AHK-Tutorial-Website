@@ -1,0 +1,161 @@
+  <div class="lesson" id="lesson-window">
+    <h2>Window Management</h2>
+    <p class="section-desc">AHK can control any window on your system — bring it to focus, wait for it to open, resize it, close it, or check if it exists. This makes it perfect for automating multi-app workflows.</p>
+    <span class="tag tag-warn">Intermediate</span>
+
+    <h3>How AHK Identifies Windows</h3>
+    <p>Every function that works with windows needs a way to identify <em>which</em> window you mean. AHK uses <strong>WinTitle expressions</strong> for this. The most common ones are:</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Expression</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>"A"</code></td><td>The currently active (foreground) window</td><td><code>WinClose("A")</code></td></tr>
+          <tr><td><code>"Notepad"</code></td><td>Any window whose title contains "Notepad"</td><td><code>WinActivate("Notepad")</code></td></tr>
+          <tr><td><code>"ahk_exe notepad.exe"</code></td><td>Window owned by a specific process name</td><td><code>WinExist("ahk_exe chrome.exe")</code></td></tr>
+          <tr><td><code>"ahk_class Notepad"</code></td><td>Window with a specific class name</td><td><code>WinActivate("ahk_class Notepad")</code></td></tr>
+          <tr><td><code>"ahk_pid 12345"</code></td><td>Window by process ID</td><td>Advanced use</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card tip-card">
+      <div class="card-title">How do You find these values?</div>
+      <p>Open any AHK script, right-click the green tray icon → <strong>Open Window Spy</strong>. Hover over any window and it shows you the title, class, and exe name in real time. This is your best friend for window automation.</p>
+    </div>
+
+    <h3>WinExist() — Does this window exist?</h3>
+    <p>Before doing anything to a window, it's good practice to check if it's actually open. <code>WinExist() returns a non-zero window handle if found, or 0 (falsy) if not.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Check if Notepad is open
+if WinExist("Notepad")
+{
+    MsgBox("Notepad is running!")
+}
+else
+{
+    MsgBox("Notepad is not open.")
+}
+
+; More reliable: match by exe name
+if WinExist("ahk_exe notepad.exe")
+{
+    MsgBox("Found Notepad by process name!")
+}</code></pre>
+    </div>
+
+    <h3>WinActivate() — Bring a window to focus</h3>
+    <p><code>WinActivate() brings the specified window to the foreground, making it the active window. Think of it like clicking on a window in the taskbar.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; I'm bringing Notepad to the front
+WinActivate("Notepad")
+
+; Bring Chrome to the front by exe name
+WinActivate("ahk_exe chrome.exe")
+
+; Hotkey: Win+N → open or focus Notepad
+#n::
+{
+    if WinExist("ahk_exe notepad.exe")
+        WinActivate("ahk_exe notepad.exe")
+    else
+        Run("notepad.exe")
+}</code></pre>
+    </div>
+
+    <h3>WinWaitActive() — Wait until a window is focused</h3>
+    <p>Sometimes you tell a window to activate, but it takes a moment to come forward (especially if it's loading). <code>WinWaitActive() pauses your script until the window is actually in the foreground.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; I'll tell Notepad to activate, then wait for it
+WinActivate("Notepad")
+WinWaitActive("Notepad")  ; blocks until Notepad is in front
+Send("Hello Notepad!")       ; safe to type now
+
+; With timeout: wait up to 3 seconds
+WinActivate("Calculator")
+if !WinWaitActive("Calculator", , 3)
+{
+    MsgBox("Calculator didn't come up in time!")
+    return
+}
+Send("123+456=")</code></pre>
+    </div>
+    <div class="card info-card">
+      <div class="card-title">🕐 The timeout parameter</div>
+      <p><code>WinWaitActive(Title, Text, Timeout) — the third argument is how many </span><strong>seconds</strong> to wait before giving up. If no timeout is specified, it waits forever. Always use a timeout in production scripts so they don't hang permanently.</p>
+    </div>
+
+    <h3>WinWait() — Wait for a window to exist</h3>
+    <p>Use <code>WinWait() when you're launching an app and need to wait for its window to first appear (it might not be active yet).</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; First I launch Notepad, then wait for its window to open
+Run("notepad.exe")
+WinWait("ahk_exe notepad.exe")   ; waits for the window to exist
+WinActivate("ahk_exe notepad.exe")  ; now bring it to front
+WinWaitActive("ahk_exe notepad.exe") ; ensure it's in foreground
+Send("Automated typing in Notepad!")</code></pre>
+    </div>
+
+    <h3>WinClose() — Close a window</h3>
+    <p><code>WinClose() sends a close request (like clicking the X button). </span><code>WinKill() forcibly terminates the process if needed.</code></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Gracefully close Notepad (may ask to save)
+WinClose("Notepad")
+
+; Force-kill a process if it won't close
+WinKill("ahk_exe notepad.exe")
+
+; Close the currently active window (like Alt+F4)
+WinClose("A")</code></pre>
+    </div>
+
+    <h3>More Useful Window Functions</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>WinGetTitle("A")</code></td><td>Gets the title of the active window</td></tr>
+          <tr><td><code>WinGetPos(&amp;x, &amp;y, &amp;w, &amp;h, "A")</code></td><td>Gets position and size of a window</td></tr>
+          <tr><td><code>WinMove(x, y, w, h, "Title")</code></td><td>Moves and resizes a window</td></tr>
+          <tr><td><code>WinMinimize("Title")</code></td><td>Minimizes a window</td></tr>
+          <tr><td><code>WinMaximize("Title")</code></td><td>Maximizes a window</td></tr>
+          <tr><td><code>WinRestore("Title")</code></td><td>Restores from min/max</td></tr>
+          <tr><td><code>WinSetAlwaysOnTop(1, "Title")</code></td><td>Makes a window always on top</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Real-World Example — Launch &amp; Automate App</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">#Requires AutoHotkey >= 2.0
+#SingleInstance Force
+
+; Ctrl+F2: Open Notepad, wait for it, type a note
+^F2::
+{
+    ; Launch Notepad
+    Run("notepad.exe")
+
+    ; Wait up to 5 seconds for it to open
+    if !WinWait("ahk_exe notepad.exe", , 5)
+    {
+        MsgBox("Notepad failed to open!")
+        return
+    }
+
+    WinActivate("ahk_exe notepad.exe")
+    WinWaitActive("ahk_exe notepad.exe", , 3)
+
+    ; Maximize and type content
+    WinMaximize("A")
+    SendText("Meeting notes - ")
+    Send(A_Now)   ; Insert current timestamp
+    Send("{Enter 2}")
+    SendText("TODO:")
+}</code></pre>
+    </div>
+  </div>

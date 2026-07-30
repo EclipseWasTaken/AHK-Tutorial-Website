@@ -1,0 +1,60 @@
+<!-- ── CONTROL FLOW ── -->
+<div class="lesson" id="lesson-controlflow">
+    <h2>Control Flow</h2>
+    <p class="section-desc">Conditionals, loops, and flow control — all with clean C-style syntax.</p>
+    <h3>If / Else</h3>
+    <div class="code-wrap">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-autohotkey">age := 25
+
+if (age &gt;= 18) {
+    MsgBox("Adult")
+} else if (age &gt;= 13) {
+    MsgBox("Teen")
+} else {
+    MsgBox("Child")
+}
+
+; Ternary
+label := (age &gt;= 18) ? "adult" : "minor"
+
+; Logical operators
+if (age &gt;= 18 &amp;&amp; age &lt; 65)
+    MsgBox("Working age")</code></pre>
+    </div>
+    <h3>Loops</h3>
+    <div class="code-wrap">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-autohotkey">; Loop N times — A_Index = 1..N
+Loop 5 {
+    ToolTip("Iteration: " . A_Index)
+    Sleep(500)
+}
+
+; While loop
+x := 0
+While (x &lt; 10) {
+    x++
+}
+
+; For-in (arrays and maps)
+fruits := ["Apple", "Banana", "Cherry"]
+For index, fruit in fruits {
+    MsgBox(index . ": " . fruit)
+}
+
+; Let's loop through all txt files on my Desktop
+Loop Files, A_Desktop . "\*.txt" {
+    MsgBox(A_LoopFileName)
+}
+
+; Here's how to use break and continue
+Loop 10 {
+    if (A_Index == 5)
+        break
+    if (Mod(A_Index, 2) == 0)
+        continue
+    MsgBox(A_Index)
+}</code></pre>
+    </div>
+</div>

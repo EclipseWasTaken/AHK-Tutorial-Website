@@ -1,0 +1,46 @@
+  <div class="lesson" id="lesson-functions">
+    <h2>Functions</h2>
+    <p class="section-desc">First-class functions, closures, fat-arrow syntax, and byref params.</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Basic function
+Greet(name) {
+    return "Hello, " . name . "!"
+}
+msg := Greet("Alice")
+
+; Default parameter values
+Power(base, exp := 2) {
+    return base ** exp
+}
+Power(3)      ; = 9
+Power(2, 8)  ; = 256
+
+; Variadic — any number of args
+Sum(args*) {
+    total := 0
+    For v in args
+        total += v
+    return total
+}
+Sum(1, 2, 3, 4)  ; = 10
+
+; Fat-arrow (single expression)
+Double := (n) =&gt; n * 2
+Double(5)  ; = 10
+
+; Closures
+MakeAdder(n) {
+    return (x) =&gt; x + n
+}
+Add5 := MakeAdder(5)
+Add5(10)  ; = 15
+
+; ByRef — modify caller's variable
+Swap(&amp;a, &amp;b) {
+    temp := a, a := b, b := temp
+}
+x := 1, y := 2
+Swap(&amp;x, &amp;y)  ; x=2, y=1</code></pre>
+    </div>
+  </div>

@@ -1,0 +1,65 @@
+<!-- ── CLIPBOARD AUTOMATION ── -->
+<div class="lesson" id="lesson-clipboard">
+  <h2>Clipboard Automation 📋</h2>
+  <p class="section-desc">Hey there! One of the absolute fastest ways to automate office tasks, data entry, and text processing is by leveraging the Windows Clipboard. AutoHotkey v2 makes reading, writing, and monitoring the clipboard incredibly simple.</p>
+
+  <h3>1. Read and Write Text Directly</h3>
+  <p>The built-in variable <code>A_Clipboard</code> gives you direct access to the clipboard. You can read it or assign to it just like any other variable!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Write to clipboard
+A_Clipboard := "Hello from AutoHotkey!"
+
+; Read from clipboard
+MsgBox("Clipboard currently holds: " . A_Clipboard)</code></pre>
+  </div>
+
+  <h3>2. The "Rookie Trap" &amp; ClipWait</h3>
+  <div class="card warning-card">
+    <div class="card-title">⚠️ The Race Condition Bug</div>
+    <p>A very common bug is sending a copy command (<code>^c</code>) and immediately trying to read <code>A_Clipboard</code>. Windows takes a fraction of a second to load the copied data into memory. If your script runs faster than Windows, it will read old data or crash!</p>
+    <p><strong>The Fix:</strong> Always clear the clipboard first, send the copy shortcut, and then call <code>ClipWait()</code> to wait for Windows to finish copying.</p>
+  </div>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">CopySelectedText() {
+    A_Clipboard := "" ; Step 1: Clear the clipboard so ClipWait can detect change
+    Send("^c")        ; Step 2: Trigger Ctrl+C
+    
+    ; Step 3: Wait up to 1 second for text to arrive
+    if !ClipWait(1) {
+        MsgBox("Copy failed or nothing was selected!")
+        return ""
+    }
+    return A_Clipboard
+}</code></pre>
+  </div>
+
+  <h3>3. Backup and Restore the Clipboard (Polite Scripts)</h3>
+  <p>If your script copies and pastes text in the background, it's very annoying for users if it overwrites what they had copied (like a link or text they were working on). A polite script backs up their clipboard, does its work, and restores it afterwards using <code>ClipboardAll()</code>!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Create a hotkey that wraps selected text in double-quotes
+^q::
+{
+    ; Backup everything (including formatting/images!)
+    clipBackup := ClipboardAll()
+    
+    ; Perform copy
+    A_Clipboard := ""
+    Send("^c")
+    if ClipWait(1) {
+        ; Wrap the text and paste it back
+        A_Clipboard := '"' . A_Clipboard . '"'
+        Send("^v")
+        Sleep(100) ; Give Windows a tiny bit of time to paste
+    }
+    
+    ; Restore original clipboard!
+    A_Clipboard := clipBackup
+}</code></pre>
+  </div>
+</div>

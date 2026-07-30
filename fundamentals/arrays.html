@@ -1,0 +1,74 @@
+<!-- ── ARRAYS DEEP DIVE ── -->
+<div class="lesson" id="lesson-arrays">
+  <h2>Arrays Deep Dive 🎒</h2>
+  <p class="section-desc">Hey! In this lesson, we are going to dive deep into <strong>Arrays</strong>. Arrays are lists of items, and they are used absolutely everywhere in scripting. Since they are so critical, you need to master how to add, remove, search, and loop through them cleanly.</p>
+
+  <div class="card warning-card">
+    <div class="card-title">⚠️ CRITICAL REMINDER: Arrays are 1-Indexed!</div>
+    <p>I have to repeat this because it's the number one mistake developers make when coming to AHK from languages like JS or Python: <strong>AutoHotkey arrays start at index 1</strong>. The first element is <code>myArray[1]</code>, and the last is <code>myArray[myArray.Length]</code>!</p>
+  </div>
+
+  <h3>1. Manipulating Arrays (Push, Pop, InsertAt, RemoveAt)</h3>
+  <p>Here is how you add and remove elements from anywhere in an array. Let's look at the basic operations:</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Create a fresh array
+todo := ["Clean Room", "Code AHK"]
+
+; 1. Push: Add to the very end
+todo.Push("Read Docs") ; ["Clean Room", "Code AHK", "Read Docs"]
+
+; 2. Pop: Remove and return the last item
+lastTask := todo.Pop() ; Removes "Read Docs" and returns it
+
+; 3. InsertAt: Insert at a specific position (shifts everything else right)
+todo.InsertAt(1, "Wake Up") ; ["Wake Up", "Clean Room", "Code AHK"]
+
+; 4. RemoveAt: Remove from a specific position (shifts everything left)
+todo.RemoveAt(2) ; Removes "Clean Room" ➜ ["Wake Up", "Code AHK"]
+
+MsgBox("Tasks left: " . todo.Length . "`nFirst: " . todo[1])</code></pre>
+  </div>
+
+  <h3>2. Loop Patterns (How to Traverse Lists)</h3>
+  <p>There are two primary ways I loop through arrays. The <strong>For Loop</strong> is standard, but sometimes a classic <strong>Index Loop</strong> is useful if you need to modify elements on the fly.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">fruits := ["Apple", "Banana", "Cherry"]
+
+; Pattern A: The For-Each Loop (Standard & Cleanest)
+for index, fruit in fruits {
+    MsgBox("Fruit #" . index . " is: " . fruit)
+}
+
+; Pattern B: Length Loop (Useful if you need index-based calculations)
+Loop fruits.Length {
+    MsgBox("Index " . A_Index . " has: " . fruits[A_Index])
+}</code></pre>
+  </div>
+
+  <h3>3. Sorting Array Elements</h3>
+  <p>AutoHotkey doesn't have a direct <code>array.Sort()</code> method, but sorting is easily achieved. Here is my favorite pattern: join the array into a string separated by newlines, use AHK's powerful built-in <code>Sort()</code> function, and split it back into an array!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">numbers := [42, 12, 99, 1, 15]
+
+; Step 1: Join into a string with newlines
+joined := ""
+for index, num in numbers {
+    joined .= num . "`n"
+}
+
+; Step 2: Sort the string (using numeric option "N")
+sortedStr := Sort(joined, "N")
+
+; Step 3: Split it back into an array
+sortedArray := StrSplit(Trim(sortedStr, "`n"), "`n")
+
+; Show results!
+MsgBox("Smallest: " . sortedArray[1] . "`nLargest: " . sortedArray[sortedArray.Length])</code></pre>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<!-- ── MOUSE & KEYBOARD STATE ── -->
+<div class="lesson" id="lesson-keystate">
+  <h2>Mouse &amp; Key State ⌨️</h2>
+  <p class="section-desc">Hey there! When you write advanced automation or game macros, you often need to check what the user is physically doing. "Is the Shift key held down right now?", "Wait until the user releases the Left Mouse Button before clicking again." Let's look at how to monitor the real-time physical states of keys and mouse buttons.</p>
+
+  <h3>1. Checking If a Key is Held Down (GetKeyState)</h3>
+  <p>To inspect the state of a key at any moment, use <code>GetKeyState(KeyName, Mode)</code>. 
+  By default, it checks the logical state. If you pass <strong>"P"</strong>, it checks the <strong>Physical</strong> state—meaning whether the user is physically pressing the key on their keyboard right now!</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Check physical press state
+^Space::
+{
+    if GetKeyState("Shift", "P") {
+        MsgBox("You pressed Ctrl+Space while physically holding Shift!")
+    } else {
+        MsgBox("You pressed Ctrl+Space without Shift.")
+    }
+}</code></pre>
+  </div>
+
+  <h3>2. Toggled States (Caps Lock, Num Lock, Scroll Lock)</h3>
+  <p>You can also check whether toggle keys are currently ON or OFF by passing <strong>"T"</strong> as the second argument. This is perfect for setting states in macros.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Check if CapsLock is toggled on
+if GetKeyState("CapsLock", "T") {
+    MsgBox("Warning: CapsLock is currently ON!")
+}</code></pre>
+  </div>
+
+  <h3>3. Pausing Until a Key is Released (KeyWait)</h3>
+  <p>The <code>KeyWait(KeyName, Options)</code> function is a powerful sync tool. It pauses your script until a specific key is released or pressed. This prevents macros from double-triggering or clicking too early.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Double-Click Macro: Waits until Left Click is released, then double clicks
+$LButton::
+{
+    ; Pass the click through by sending it, but wait for the physical release
+    Send("{LButton Down}")
+    KeyWait("LButton") ; Pauses script here until the user physically lets go!
+    Send("{LButton Up}")
+    
+    ; Immediately click again! (Double click)
+    Click()
+}</code></pre>
+  </div>
+
+  <div class="card info-card">
+    <div class="card-title">💡 My KeyWait Time-Out Trick</div>
+    <p>By default, <code>KeyWait</code> pauses the script indefinitely. But you can pass <strong>"T[Seconds]"</strong> in the options to set a timeout! If the key is not released/pressed within that timeframe, it returns 0 instead of 1. This prevents your script from hanging forever:</p>
+    <pre><code class="language-autohotkey">; Wait up to 3 seconds for the user to press the Enter key
+if KeyWait("Enter", "D T3") { ; "D" means wait for key to go DOWN
+    MsgBox("Enter was pressed within 3 seconds!")
+} else {
+    MsgBox("Enter was not pressed in time.")
+}</code></pre>
+  </div>
+</div>

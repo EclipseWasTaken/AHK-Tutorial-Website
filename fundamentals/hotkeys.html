@@ -1,0 +1,80 @@
+  <!-- ── HOTKEYS ── -->
+  <div class="lesson" id="lesson-hotkeys">
+    <h2>Hotkeys</h2>
+    <p class="section-desc">Hotkeys are the heart of AutoHotkey. Trigger code with any key combination.</p>
+    <h3>Modifier Symbols</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Key</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>^</code></td><td>Ctrl</td><td><code>^c</code> = Ctrl+C</td></tr>
+          <tr><td><code>!</code></td><td>Alt</td><td><code>!Tab</code> = Alt+Tab</td></tr>
+          <tr><td><code>+</code></td><td>Shift</td><td><code>+F4</code> = Shift+F4</td></tr>
+          <tr><td><code>#</code></td><td>Win key</td><td><code>#d</code> = Win+D</td></tr>
+          <tr><td><code>*</code></td><td>Wildcard (any modifier)</td><td><code>*a</code></td></tr>
+          <tr><td><code>~</code></td><td>Passthrough (native also fires)</td><td><code>~^c</code></td></tr>
+          <tr><td><code>$</code></td><td>Hook (prevents Send recursion)</td><td><code>$^c</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; These are basic hotkeys
+^j::
+{
+    MsgBox("Ctrl+J pressed!")
+}
+
+!F4::
+{
+    WinClose("A")  ; "A" = active window
+}
+
+; Single-line hotkey
+#Space:: Run("notepad.exe")
+
+; Remap one key to another
+CapsLock::Ctrl
+
+; Context-sensitive
+#HotIf WinActive("ahk_exe notepad.exe")
+^s::
+{
+    Send("This only works in Notepad!")
+}
+#HotIf</code></pre>
+    </div>
+    <h3>Special Key Names</h3>
+    <div class="hk-grid">
+      <div class="hk-item"><div class="hk-key">F1–F24</div><div class="hk-desc">Function keys</div></div>
+      <div class="hk-item"><div class="hk-key">Enter</div><div class="hk-desc">Return key</div></div>
+      <div class="hk-item"><div class="hk-key">Tab</div><div class="hk-desc">Tab key</div></div>
+      <div class="hk-item"><div class="hk-key">Space</div><div class="hk-desc">Spacebar</div></div>
+      <div class="hk-item"><div class="hk-key">Backspace</div><div class="hk-desc">Backspace</div></div>
+      <div class="hk-item"><div class="hk-key">Delete</div><div class="hk-desc">Del key</div></div>
+      <div class="hk-item"><div class="hk-key">Escape</div><div class="hk-desc">Esc</div></div>
+      <div class="hk-item"><div class="hk-key">Home / End</div><div class="hk-desc">Navigation</div></div>
+      <div class="hk-item"><div class="hk-key">PgUp / PgDn</div><div class="hk-desc">Page keys</div></div>
+      <div class="hk-item"><div class="hk-key">Up/Down</div><div class="hk-desc">Arrow keys</div></div>
+      <div class="hk-item"><div class="hk-key">Left/Right</div><div class="hk-desc">Arrow keys</div></div>
+      <div class="hk-item"><div class="hk-key">LButton</div><div class="hk-desc">Left mouse</div></div>
+    </div>
+    <h3>Hotstrings</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Type "btw" then space/enter → expands
+::btw::"by the way"
+
+; Hotstring with code block
+::sig::
+{
+    Send("John Doe{Enter}john@example.com{Enter}555-1234")
+}
+
+; * = fires immediately, no end char needed
+:*:teh::"the"
+
+; r = raw (no special key parsing)
+:r:html::"&lt;html&gt;&lt;/html&gt;"</code></pre>
+    </div>
+  </div>

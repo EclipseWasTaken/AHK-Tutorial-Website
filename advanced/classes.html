@@ -1,0 +1,46 @@
+  <!-- ── CLASSES ── -->
+  <div class="lesson" id="lesson-classes">
+    <h2>Classes &amp; OOP</h2>
+    <p class="section-desc">Proper class system with inheritance, properties, and static members.</p>
+    <span class="tag tag-adv">Advanced</span>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">class Animal {
+    name := "Unknown"  ; instance property
+
+    __New(name) {       ; constructor
+        this.name := name
+    }
+
+    Speak() {
+        return this.name . " says something"
+    }
+
+    ; Getter/setter property
+    Label {
+        get =&gt; "Animal: " . this.name
+        set =&gt; this.name := value
+    }
+
+    static kingdom := "Animalia"  ; static member
+}
+
+class Dog extends Animal {
+    breed := "Mixed"
+
+    __New(name, breed) {
+        super.__New(name)
+        this.breed := breed
+    }
+
+    Speak() {
+        return this.name . " barks!"
+    }
+}
+
+fido := Dog("Fido", "Labrador")
+MsgBox(fido.Speak())       ; "Fido barks!"
+MsgBox(Animal.kingdom)    ; "Animalia"
+MsgBox(fido is Animal)    ; true</code></pre>
+    </div>
+  </div>

@@ -1,0 +1,179 @@
+  <div class="lesson" id="lesson-filesystem">
+    <h2>File System Operations</h2>
+    <p class="section-desc">AHK can read from and write to files, check if files exist, create folders, and scan directories. This lets you build scripts that log data, load configuration, process text files, and much more.</p>
+    <span class="tag tag-warn">Intermediate</span>
+
+    <h3>FileExist() — Check if a file or folder exists</h3>
+    <p>Before reading or writing, always check if the file is there. <code>FileExist() returns an attribute string if found, or an empty string (falsy) if not.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; I always check if a file exists before doing anything
+if FileExist("C:\logs\output.txt")
+{
+    MsgBox("File found!")
+}
+else
+{
+    MsgBox("File does not exist.")
+}
+
+; Check if a folder exists
+if FileExist("C:\MyFolder")
+{
+    MsgBox("Folder exists!")
+}
+
+; Use it in-line (cleaner)
+logExists := FileExist("C:\logs\app.log") != ""
+MsgBox("Log present: " . logExists)</code></pre>
+    </div>
+    <div class="card info-card">
+      <div class="card-title">Attribute string</div>
+      <p><code>FileExist() returns a string like </code><code>"A"</code> (Archive), <code>"D"</code> (Directory), <code>"R"</code> (Read-only), etc. For a simple existence check, just test it as a boolean — empty string is falsy, any non-empty string is truthy.</p>
+    </div>
+
+    <h3>FileRead() — Read a file into a variable</h3>
+    <p><code>FileRead() loads the entire contents of a text file into a string. Perfect for reading config files, lists, or log data.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Read a file and display its contents
+content := FileRead("C:\notes.txt")
+MsgBox(content)
+
+; I highly recommend checking if it exists first (best practice)
+if FileExist("C:\config.txt")
+{
+    data := FileRead("C:\config.txt")
+    MsgBox("Config loaded: " . data)
+}
+else
+{
+    MsgBox("Config file missing!")
+}
+
+; Process a list — split by newline
+lines := StrSplit(FileRead("C:\words.txt"), "`n")
+For i, line in lines
+{
+    MsgBox("Line " . i . ": " . line)
+}</code></pre>
+    </div>
+    <div class="card tip-card">
+      <div class="card-title">Backtick escapes in AHK strings</div>
+      <p>In AHK v2, the backtick <code>`</code> is the escape character inside strings. So a newline is <code>`n</code>, a tab is <code>`t</code>, and a carriage return is <code>`r</code>. Windows files often use <code>`r`n</code> (CRLF) as line endings.</p>
+    </div>
+
+    <h3>FileAppend() — Write text to a file</h3>
+    <p><code>FileAppend() adds text to the end of a file. If the file doesn't exist, it creates it. This is ideal for logging — each call adds a new entry without erasing old ones.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Write a single line to a log file
+FileAppend("Script started.`n", "C:\log.txt")
+
+; Append with a timestamp
+timestamp := FormatTime(, "yyyy-MM-dd HH:mm:ss")
+FileAppend(timestamp . " — Script ran`n", "C:\log.txt")
+
+; Log a variable value
+score := 42
+FileAppend("Score: " . score . "`n", "C:\results.txt")
+
+; Write multiple lines at once
+FileAppend("Line 1`nLine 2`nLine 3`n", "C:\output.txt")</code></pre>
+    </div>
+
+    <h3>FileDelete() — Delete a file</h3>
+    <p>Use <code>FileDelete() to remove a file. Wildcards are supported for batch deletion.</span></p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Delete a single file
+FileDelete("C:\old_log.txt")
+
+; Delete all .tmp files in a folder
+FileDelete("C:\Temp\*.tmp")
+
+; What I suggest (check file exists):
+if FileExist("C:\cache.dat")
+{
+    FileDelete("C:\cache.dat")
+    MsgBox("Cache cleared!")
+}</code></pre>
+    </div>
+
+    <h3>DirCreate() — Create a folder</h3>
+    <p><code>DirCreate() makes a new directory. It creates all intermediate parent directories automatically, like </span><code>mkdir -p</code> in Linux.</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Create a single folder
+DirCreate("C:\MyApp\logs")
+
+; Create nested folders in one call
+DirCreate("C:\Projects\AHK\scripts\utils")
+
+; What I suggest (Only create if it doesn't exist)
+if !FileExist("C:\MyApp\output")
+{
+    DirCreate("C:\MyApp\output")
+    MsgBox("Output folder created!")
+}</code></pre>
+    </div>
+
+    <h3>More File Functions</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>FileCopy(src, dest)</code></td><td>Copies a file to a new location</td></tr>
+          <tr><td><code>FileMove(src, dest)</code></td><td>Moves (or renames) a file</td></tr>
+          <tr><td><code>DirDelete(path, recurse)</code></td><td>Deletes a folder (set recurse=1 to delete contents)</td></tr>
+          <tr><td><code>DirCopy(src, dest)</code></td><td>Copies a whole folder</td></tr>
+          <tr><td><code>DirMove(src, dest)</code></td><td>Moves a folder</td></tr>
+          <tr><td><code>SplitPath(fullpath, &amp;name, &amp;dir)</code></td><td>Splits a path into its parts</td></tr>
+          <tr><td><code>A_ScriptDir</code></td><td>Built-in: the folder the script is running from</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Real-World Example — Session Logger</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">#Requires AutoHotkey >= 2.0
+#SingleInstance Force
+
+logFile := A_ScriptDir . "\session.log"
+
+; We need to make sure the log folder exists
+DirCreate(A_ScriptDir)
+
+; On start, write a session entry
+startTime := FormatTime(, "yyyy-MM-dd HH:mm:ss")
+FileAppend("=== Session started: " . startTime . " ===`n", logFile)
+
+; Ctrl+L → show the log contents
+^l::
+{
+    if FileExist(logFile)
+    {
+        content := FileRead(logFile)
+        MsgBox(content)
+    }
+    else
+        MsgBox("No log yet!")
+}
+
+; Ctrl+Shift+L → clear the log
+^+l::
+{
+    if FileExist(logFile)
+    {
+        FileDelete(logFile)
+        MsgBox("Log cleared!")
+    }
+}</code></pre>
+    </div>
+
+    <div class="card warn-card">
+      <div class="card-title">⚠️ Paths and Backslashes</div>
+      <p>In AHK v2 strings, the backslash <code>\</code> is <strong>not</strong> an escape character (unlike many languages). So <code>"C:\folder\file.txt"</code> works exactly as written — no need to double the backslashes. Only the backtick <code>`</code> is special inside AHK strings.</p>
+    </div>
+  </div>

@@ -1,0 +1,59 @@
+<!-- ── SOUND & NOTIFICATIONS ── -->
+<div class="lesson" id="lesson-sound">
+  <h2>Sound &amp; Alerts 🔔</h2>
+  <p class="section-desc">Hey there! When you write a background automation script, you often want it to signal you when it finishes a task or runs into an error, especially if you are tabbed out or looking away. Let's make your scripts come alive with audio beeps, music, and tray notifications!</p>
+
+  <h3>1. Custom Audio Alerts (SoundBeep)</h3>
+  <p>The simplest way to get feedback is with a motherboard beep. In AHK v2, <code>SoundBeep()</code> lets you specify the exact **frequency** (in Hertz) and **duration** (in milliseconds) of the beep.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Play a standard beep (523Hz for 150ms)
+SoundBeep()
+
+; I always use a High/Low pattern to denote success vs. errors in macros:
+PlaySuccess() {
+    SoundBeep(800, 100) ; High pitch
+    SoundBeep(1200, 150) ; Even higher
+}
+
+PlayError() {
+    SoundBeep(300, 300) ; Low, long warning pitch
+}
+
+^1:: PlaySuccess()
+^2:: PlayError()</code></pre>
+  </div>
+
+  <h3>2. Playing Audio Files (SoundPlay)</h3>
+  <p>Need something richer than a simple beep? Use <code>SoundPlay()</code> to play a `.wav`, `.mp3`, or `.wma` file. You can also specify if the script should pause until the sound finishes playing.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Play a built-in Windows sound effect in the background
+SoundPlay("C:\Windows\Media\tada.wav")
+
+; Play sound and wait (script will pause until audio is fully done)
+SoundPlay("C:\Windows\Media\Windows Logon.wav", "WAIT")
+MsgBox("Audio completed!")</code></pre>
+  </div>
+
+  <h3>3. Native Windows System Alerts (TrayTip)</h3>
+  <p>If you don't want to make noise or interrupt the user with a pop-up <code>MsgBox</code>, you can slide a beautiful native notification in the bottom right corner of their screen using <code>TrayTip()</code>.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Syntax: TrayTip(Text, Title, Options)
+; Options: "Iconi" (Info), "Icon!" (Warning), "Iconx" (Error), "Mute" (Silent)
+TrayTip("Task Completed!", "AV Automation", "Iconi Mute")
+
+; Close the notification manually after 5 seconds
+Sleep(5000)
+TrayTip() ; Calling TrayTip with no arguments clears the active notification</code></pre>
+  </div>
+
+  <div class="card info-card">
+    <div class="card-title">💡 My Notification Strategy</div>
+    <p>Notifications are amazing, but don't spam your users! I recommend using silent <code>TrayTip</code> alerts for general background updates, a nice high-pitched <code>SoundBeep</code> for successful operation finishes, and a <code>MsgBox</code> with an <code>Iconx</code> error icon ONLY when something goes horribly wrong and requires the user to physically intervene.</p>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="section" id="section-progress">
+  <h2>My Progress</h2>
+  <p class="section-desc">Check off topics as you learn them.</p>
+  <div class="card">
+    <div id="prog-list">
+      <div class="progress-item"><div class="prog-check" id="prog-0" onclick="toggleProg(0)"></div><span class="prog-label" id="prog-label-0">Introduction &amp; installation<span class="tag tag-new prog-tag">Beginner</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-1" onclick="toggleProg(1)"></div><span class="prog-label" id="prog-label-1">Basic syntax &amp; assignments<span class="tag tag-new prog-tag">Beginner</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-2" onclick="toggleProg(2)"></div><span class="prog-label" id="prog-label-2">Hotkeys &amp; hotstrings<span class="tag tag-new prog-tag">Beginner</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-3" onclick="toggleProg(3)"></div><span class="prog-label" id="prog-label-3">Variables &amp; built-in vars<span class="tag tag-new prog-tag">Beginner</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-4" onclick="toggleProg(4)"></div><span class="prog-label" id="prog-label-4">Control flow (if/loop/while)<span class="tag tag-new prog-tag">Beginner</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-5" onclick="toggleProg(5)"></div><span class="prog-label" id="prog-label-5">Functions &amp; fat-arrow syntax<span class="tag tag-v2 prog-tag">Intermediate</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-6" onclick="toggleProg(6)"></div><span class="prog-label" id="prog-label-6">Objects, Arrays &amp; Maps<span class="tag tag-v2 prog-tag">Intermediate</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-7" onclick="toggleProg(7)"></div><span class="prog-label" id="prog-label-7">String methods &amp; formatting<span class="tag tag-v2 prog-tag">Intermediate</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-8" onclick="toggleProg(8)"></div><span class="prog-label" id="prog-label-8">GUI building<span class="tag tag-v2 prog-tag">Intermediate</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-9" onclick="toggleProg(9)"></div><span class="prog-label" id="prog-label-9">While loops with pixel conditions<span class="tag tag-adv prog-tag">Advanced</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-10" onclick="toggleProg(10)"></div><span class="prog-label" id="prog-label-10">Classes &amp; OOP<span class="tag tag-adv prog-tag">Advanced</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-11" onclick="toggleProg(11)"></div><span class="prog-label" id="prog-label-11">Regular expressions<span class="tag tag-adv prog-tag">Advanced</span></div>
+      <div class="progress-item"><div class="prog-check" id="prog-12" onclick="toggleProg(12)"></div><span class="prog-label" id="prog-label-12">COM objects (Excel, Word…)<span class="tag tag-adv prog-tag">Advanced</span></div>
+    </div>
+    <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:1rem">
+      <div style="flex:1;height:8px;background:var(--bg4);border-radius:100px;overflow:hidden">
+        <div id="overall-bar" style="height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));border-radius:100px;transition:width .4s;width:0%"></div>
+      </div>
+      <span id="overall-pct" style="font-size:14px;font-weight:700;color:var(--accent3);min-width:36px">0%
+    </div>
+  </div>
+
+  <h3>Resources</h3>
+  <div class="grid-2">
+    <div class="card"><div class="card-title">📖 Official Docs</div><p><a href="https://www.autohotkey.com/docs/v2/" target="_blank">autohotkey.com/docs/v2</a> — The definitive reference for every function and directive.</p></div>
+    <div class="card"><div class="card-title">💬 Community Forums</div><p><a href="https://www.autohotkey.com/boards/" target="_blank">autohotkey.com/boards</a> — Active community. Great for getting help with specific scripts.</p></div>
+    <div class="card"><div class="card-title">🔬 Script Showcase</div><p><a href="https://www.autohotkey.com/boards/viewforum.php?f=6" target="_blank">Scripts &amp; Functions forum</a> — Browse thousands of community scripts for inspiration.</p></div>
+    <div class="card"><div class="card-title">🛠️ Editor Setup</div><p><a href="https://code.visualstudio.com" target="_blank">VS Code</a> + the AutoHotkey v2 extension gives you syntax highlighting, IntelliSense, and a run button.</p></div>
+  </div>
+</div>

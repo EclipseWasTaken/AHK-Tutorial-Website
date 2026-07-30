@@ -1,0 +1,78 @@
+<!-- ── INTRO ── -->
+<div class="lesson" id="lesson-intro">
+  <div class="hero">
+    <div class="hero-badge">✦ AutoHotkey v2 · Complete Guide</div>
+    <h1>Automate <em>anything</em><br>on Windows</h1>
+    <p>AutoHotkey v2 is a free, open-source scripting language for Windows. Remap keys, automate repetitive tasks, build
+      GUIs, and control any app.</p>
+    <div class="hero-pills">
+      <span class="pill teal">Free &amp; Open Source</span>
+      <span class="pill blue">Windows Only</span>
+      <span class="pill purple">v2.0 — Cleaner Syntax</span>
+    </div>
+  </div>
+  <h3>Why AHK v2?</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">⚡ Instant Automation</div>
+      <p>Turn any repetitive task into a single keypress. Text expansion, form filling, app launching.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Deep Windows Integration</div>
+      <p>Control windows, processes, registry, files, and other apps via COM objects.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Mouse &amp; Keyboard Control</div>
+      <p>Simulate any keyboard or mouse input. Remap any key to do anything.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Build Real GUIs</div>
+      <p>Create Windows GUI apps with buttons, inputs, dropdowns — no extra framework needed.</p>
+    </div>
+  </div>
+  <div class="card info-card">
+    <div class="card-title">🔄 v1 vs v2 — Key Changes</div>
+    <p>AHK v2 intentionally breaks v1 compatibility to fix design flaws. Key changes: use <span class="inline-code">:=
+        for all assignments, no more </span><span class="inline-code">%var% dereferencing (use </span><span
+        class="inline-code">var directly), functions always need parentheses, fat-arrow syntax </span><span
+        class="inline-code">=>, and proper class system. This guide covers v2 only.</span></p>
+  </div>
+  <h3>Your first script</h3>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Save as MyScript.ahk or wtv and double-click to run
+#Requires AutoHotkey &gt;= 2.0
+#SingleInstance Force
+
+; Ctrl+J — show a message
+^j::
+{
+    MsgBox("Hello from AHK v2!")
+}
+
+; Ctrl+Shift+R — reload script
+^+r::
+{
+    Reload()
+}
+
+; Ctrl+Shift+Q — quit
+^+q::
+{
+    ExitApp()
+}</code></pre>
+  </div>
+  <div class="card tip-card">
+    <div class="card-title">💡 Pro Tip</div>
+    <p>Always include a quit hotkey (<span class="inline-code">^+q) and reload hotkey (</span><span
+        class="inline-code">^+r) in every script. It saves enormous frustration when testing.</span></p>
+  </div>
+  <h3>Installing</h3>
+  <ul>
+    <li>Download from <a href="https://www.autohotkey.com" target="_blank">autohotkey.com</a> — choose v2</li>
+    <li>Run the installer with default options</li>
+    <li>Right-click Desktop → New → AutoHotkey Script</li>
+    <li>Double-click the .ahk file to run it</li>
+    <li>Look for the green tray icon — that means it's running</li>
+  </ul>
+</div>

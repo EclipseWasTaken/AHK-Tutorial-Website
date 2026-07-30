@@ -1,0 +1,39 @@
+  <div class="lesson" id="lesson-filegui">
+    <h2>GUI Basics</h2>
+    <p class="section-desc">Build real Windows GUI applications.</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Create a GUI
+myGui := Gui()
+myGui.Title := "My First GUI"
+
+; Add controls
+myGui.Add("Text", , "Enter your name:")
+nameInput := myGui.Add("Edit", "w200")
+btn := myGui.Add("Button", "Default", "Greet")
+
+; Bind button click event
+btn.OnEvent("Click", GreetUser)
+
+myGui.Show()
+
+GreetUser(ctrl, *) {
+    name := nameInput.Value
+    MsgBox("Hello, " . name . "!")
+}
+
+; Control types
+; "Text"          — static label
+; "Edit"          — text input (w=width, Multi=multiline)
+; "Button"        — clickable button
+; "Checkbox"      — checkbox (returns 0/1)
+; "DropDownList"  — dropdown
+; "ListBox"       — scrollable list
+; "Progress"      — progress bar
+
+; Reading values
+ddl := myGui.Add("DropDownList", , ["A", "B", "C"])
+ddl.Value  ; Index of selected item
+ddl.Text   ; Text of selected item</code></pre>
+    </div>
+  </div>

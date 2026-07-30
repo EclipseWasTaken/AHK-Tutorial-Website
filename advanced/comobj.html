@@ -1,0 +1,28 @@
+  <!-- ── COM ── -->
+  <div class="lesson" id="lesson-comobj">
+    <h2>COM Objects</h2>
+    <p class="section-desc">Control Excel, Word, and other COM-enabled apps directly from AHK.</p>
+    <span class="tag tag-adv">Advanced</span>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code class="language-autohotkey">; Control Excel
+excel := ComObject("Excel.Application")
+excel.Visible := true
+wb := excel.Workbooks.Add()
+ws := wb.Worksheets(1)
+ws.Cells(1, 1).Value := "Hello from AHK!"
+wb.SaveAs("C:\test.xlsx")
+excel.Quit()
+
+; Shell operations
+shell := ComObject("Shell.Application")
+shell.Open("C:\")
+
+; Internet Explorer / MSHTML
+ie := ComObject("InternetExplorer.Application")
+ie.Visible := true
+ie.Navigate("https://autohotkey.com")
+Sleep(2000)
+MsgBox(ie.Document.title)</code></pre>
+    </div>
+  </div>

@@ -1,0 +1,89 @@
+<!-- ── ARRAY & MAP METHODS ── -->
+<div class="lesson" id="lesson-advmethods">
+  <h2>Array &amp; Map Methods 📊</h2>
+  <p class="section-desc">Hey! Welcome to the advanced data structure lesson. If you are building complex applications, simple variables won't cut it. You will need to nest arrays inside maps, handle multi-dimensional configurations, and understand how AHK manages memory. Let's tackle references and cloning.</p>
+
+  <h3>1. Shallow Copy vs. Deep Copy (The Memory Reference Trap)</h3>
+  <div class="card warning-card">
+    <div class="card-title">⚠️ The Reference Trap (Silent Bug!)</div>
+    <p>In AutoHotkey (like JavaScript), objects and arrays are stored by **reference**. When you assign an array to a new variable, you are NOT copying the values. You are just creating a new pointer to the *exact same* list in memory!</p>
+  </div>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">original := ["Apple", "Banana"]
+
+; 1. Shallow assignment
+copyRef := original 
+
+; Modify the "copy"
+copyRef.Push("Cherry")
+
+; Let's check the original!
+MsgBox("Original length: " . original.Length) ; Displays 3! The original was changed!</code></pre>
+  </div>
+
+  <p><strong>The Fix: Cloning.</strong> To make an actual, independent copy of an array or object, use the <code>Clone()</code> method. This makes a shallow copy (copies all top-level keys into a new block of memory).</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">original := ["Apple", "Banana"]
+
+; 2. Proper clone
+realCopy := original.Clone()
+
+realCopy.Push("Cherry")
+
+MsgBox("Original length: " . original.Length . "`nReal Copy length: " . realCopy.Length)
+; Original remains 2, Real Copy is 3! Independent!</code></pre>
+  </div>
+
+  <h3>2. Nesting Objects (Complex Configurations)</h3>
+  <p>Real scripts use nested structures, such as a **Map of Objects** or a **Map of Arrays**. This is perfect for coordinating multi-slot macros or character configuration layouts.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">; Create a complex Map representing our automated slots config
+slots := Map()
+
+slots["Slot1"] := {
+    x: 840,
+    y: 530,
+    active: true,
+    upgrades: [1, 2, 5]
+}
+
+slots["Slot2"] := {
+    x: 960,
+    y: 530,
+    active: false,
+    upgrades: [1, 1]
+}
+
+; Read deep nested values:
+if (slots["Slot1"].active) {
+    targetX := slots["Slot1"].x
+    firstUpgrade := slots["Slot1"].upgrades[1]
+    MsgBox("Slot 1 is active at X: " . targetX . ", First upgrade level: " . firstUpgrade)
+}</code></pre>
+  </div>
+
+  <h3>3. Key-Value Maps In Depth</h3>
+  <p>Unlike standard arrays (which start at index 1 and must be numeric), **Maps** are perfect for associating names directly to values. Always remember that keys in AHK v2 Maps are case-insensitive by default for string keys, and you must use the brackets or `Get()` methods to retrieve keys securely.</p>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code class="language-autohotkey">userScores := Map("Eclipse", 100, "Bob", 85)
+
+; Insert dynamically
+userScores["Alice"] := 95
+
+; Check if key exists before reading (crashes if key doesn't exist!)
+if userScores.Has("Bob") {
+    MsgBox("Bob's score: " . userScores["Bob"])
+}
+
+; Remove a key
+userScores.Delete("Bob")</code></pre>
+  </div>
+</div>
